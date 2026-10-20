@@ -1,0 +1,4162 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf4e4">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="Found a cricket club on the village green and take it all the way to Lord's. Play your big chances the cricket way, build your ground, scout and sign players. Free in your browser.">
+  <title>Willow & Leather: Cricket Club Manager</title>
+  <link rel="icon" href="assets/logo.jpg" type="image/jpeg">
+
+  <style>
+/* Willow & Leather: Cricket Club Manager
+   Aesthetic inspired by Flicco Manager - Warm Paper, Tactile Cards, Rich Ink & Cricket Green
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #fbf4e4;
+  --card: #fffcf5;
+  --ink: #2a2620;
+  --soft: #6b645a;
+  --ledge: #cfc1a5;
+  --edge: #e3d8c3;
+  --line: #eadfca;
+  --well: #e8dfcd;
+  --well-hover: #ded2bd;
+  --go: #c73824; /* cricket cherry red */
+  --go-deep: #8f2314;
+  --go-hover: #b02a18;
+  --link: #c2401a;
+  --pitch: #2e8b39;
+  --pitch-deep: #1c5e24;
+  --sun: #f5b027; /* gold */
+  --sun-deep: #b37e14;
+  --up: #2c8a38;
+  --warn: #df8a1f;
+  --down: #cf3b2c;
+  --brand-cream: #fff4df;
+  --brand-ink: #2a2620;
+  --solid: #2a2620;
+  --on-solid: #fff4df;
+  --tint-gold: #fff1c9;
+  --tint-up: #dff2da;
+  --tint-down: #fbe1dc;
+  --glass: rgba(255, 252, 245, 0.95);
+  
+  --display: "Baloo 2", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --num: "Barlow Condensed", "Baloo 2", sans-serif;
+  --body: "Outfit", sans-serif;
+
+  --k-r-s: 10px;
+  --k-r-m: 14px;
+  --k-r-l: 20px;
+  --k-shadow: 0 0 0 1px rgba(42, 38, 32, .07), 0 2px 4px rgba(42, 38, 32, .05);
+  --k-shadow-pop: 0 0 0 1px rgba(42, 38, 32, .08), 0 12px 28px -8px rgba(42, 38, 32, .25);
+
+  --top: max(14px, env(safe-area-inset-top));
+  --bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root[data-theme="dark"] {
+  --bg: #1b1814;
+  --card: #27231d;
+  --ink: #f2eadb;
+  --soft: #b9ae9b;
+  --ledge: #0e0c0a;
+  --edge: #3a342b;
+  --line: #36302a;
+  --well: #36302a;
+  --well-hover: #433b31;
+  --link: #ff8f66;
+  --pitch: #205c28;
+  --pitch-deep: #133a18;
+  --sun-deep: #e8b84a;
+  --up: #5fc26c;
+  --warn: #f0a24a;
+  --down: #ff6d5c;
+  --solid: #f2eadb;
+  --on-solid: #1b1814;
+  --tint-gold: #3b311a;
+  --tint-up: #1f3523;
+  --tint-down: #43241f;
+  --glass: rgba(39, 35, 29, 0.95);
+  --k-shadow: 0 0 0 1px rgba(255, 255, 255, .06), 0 2px 4px rgba(0, 0, 0, .3);
+  --k-shadow-pop: 0 0 0 1px rgba(255, 255, 255, .08), 0 14px 28px -8px rgba(0, 0, 0, .6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.35;
+  user-select: none;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* App Viewport Container */
+#app {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 900px) {
+  #app {
+    max-width: 620px;
+  }
+}
+
+/* Top App Bar */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: calc(var(--top) + 2px) 16px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  border: 1px solid var(--edge);
+}
+
+.brand-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-details h1 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.brand-details span {
+  font-size: 12px;
+  color: var(--soft);
+  font-weight: 700;
+}
+
+.top-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pill-coin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: var(--k-shadow);
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.coin-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #ffe8a3 0 18%, var(--sun) 46%, #e2a72a 100%);
+  display: inline-block;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--card);
+  box-shadow: var(--k-shadow);
+  color: var(--soft);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  transition: transform 0.1s, background-color 0.15s;
+}
+
+.icon-btn:active {
+  transform: scale(0.94);
+}
+
+/* Main Content Screen Area */
+.screen-container {
+  flex: 1;
+  padding: 14px 16px calc(88px + var(--bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Card System */
+.card {
+  background: var(--card);
+  border-radius: var(--k-r-l);
+  box-shadow: 0 4px 0 var(--ledge);
+  border: 1px solid var(--edge);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card.flat {
+  box-shadow: 0 2px 0 var(--edge);
+}
+
+/* Ground Hero Banner */
+.ground-hero {
+  position: relative;
+  height: 190px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 5px 0 var(--ledge);
+  background: #2a5a2e center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.ground-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.55) 100%);
+  z-index: 1;
+}
+
+.ground-hero > * {
+  position: relative;
+  z-index: 2;
+}
+
+.ground-tag-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ground-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.ground-info {
+  color: #fff;
+}
+
+.ground-info h2 {
+  font-size: 22px;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 2px;
+}
+
+.ground-info p {
+  font-size: 13px;
+  opacity: 0.92;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Next Match / Fixture Card */
+.fixture-card {
+  padding: 16px;
+  border-radius: 22px;
+  background: var(--pitch);
+  box-shadow: 0 5px 0 var(--pitch-deep);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fixture-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  font-weight: 700;
+  opacity: 0.95;
+}
+
+.fixture-badge {
+  background: rgba(0,0,0,0.25);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: var(--num);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.teams-clash {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.team-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.team-crest {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--ink);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.team-pill b {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+.team-pill span {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.vs-pill {
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--sun);
+  background: rgba(0,0,0,0.3);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.match-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Primary Button */
+.btn-go {
+  flex: 1;
+  min-height: 50px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--go);
+  box-shadow: 0 4px 0 var(--go-deep);
+  color: #fff;
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.1s, box-shadow 0.1s, background-color 0.15s;
+}
+
+.btn-go:hover {
+  background: var(--go-hover);
+}
+
+.btn-go:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--go-deep);
+}
+
+.btn-ghost {
+  min-height: 50px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.1s;
+}
+
+.btn-ghost:active {
+  transform: scale(0.96);
+}
+
+.btn-secondary {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--well);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.1s, background-color 0.15s;
+}
+
+.btn-secondary:hover {
+  background: var(--well-hover);
+}
+
+.btn-secondary:active {
+  transform: scale(0.96);
+}
+
+/* Tiles Grid */
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.tile {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 var(--ledge);
+  border: 1px solid var(--edge);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tile span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tile b {
+  font-family: var(--num);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.tile small {
+  font-size: 12px;
+  color: var(--soft);
+  font-weight: 600;
+}
+
+/* News / Gossip Ticker */
+.news-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.news-box h3 {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+
+.news-item {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--edge);
+  box-shadow: 0 2px 0 var(--edge);
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Squad & Lineup Tab */
+.lineup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.segmented-control {
+  display: flex;
+  background: var(--well);
+  border-radius: 14px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.seg-btn {
+  border: 0;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-family: var(--display);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.seg-btn.active {
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 800;
+  box-shadow: var(--k-shadow);
+}
+
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-row {
+  display: grid;
+  grid-template-columns: 28px 40px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--edge);
+  box-shadow: 0 2px 0 var(--edge);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+
+.player-row:hover {
+  border-color: var(--ledge);
+}
+
+.player-row:active {
+  transform: scale(0.98);
+}
+
+.player-row.selected {
+  outline: 2px solid var(--go);
+  background: var(--tint-gold);
+}
+
+.player-order {
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--soft);
+  text-align: center;
+}
+
+.player-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.player-info-name {
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.badge-bat { background: #ffe5d9; color: #d90429; }
+.badge-bowl { background: #d8f3dc; color: #1b4332; }
+.badge-all { background: #ede0d4; color: #7f4f24; }
+.badge-wk { background: #d0f4de; color: #007200; }
+
+.player-info-sub {
+  font-size: 12px;
+  color: var(--soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.player-rating {
+  font-family: var(--num);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: var(--well);
+}
+
+/* Tactics Selector */
+.tactics-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tactic-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tactic-item label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--soft);
+  text-transform: uppercase;
+}
+
+.tactic-select {
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--edge);
+  box-shadow: 0 2px 0 var(--edge);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  cursor: pointer;
+}
+
+/* Matchday Arena Screen */
+.matchday-board {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  color: #fff4df;
+  padding: 16px;
+  background: repeating-linear-gradient(90deg, #ffffff08 0, #ffffff08 40px, #00000006 40px, #00000006 80px),
+              radial-gradient(120% 90% at 50% 0%, var(--pitch) 0%, var(--pitch-deep) 100%);
+  box-shadow: 0 6px 0 #143d1a;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.match-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.live-badge {
+  background: var(--go);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-family: var(--num);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: pulse-live 1.5s infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(0.96); }
+}
+
+.live-scoreline {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.score-main {
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 48px;
+  line-height: 1;
+  color: #fff;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.score-overs {
+  font-size: 20px;
+  opacity: 0.8;
+  font-weight: 700;
+}
+
+.score-rates {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.score-rates b {
+  font-family: var(--num);
+  font-size: 18px;
+  color: var(--sun);
+}
+
+.score-rates span {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* Active Batsmen & Bowler strip */
+.crease-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 8px 10px;
+  border-radius: 14px;
+}
+
+.crease-player {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+
+.crease-player b {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.crease-player span {
+  font-family: var(--num);
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* Over Ball Timeline */
+.over-balls-track {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.ball-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.ball-bubble.pop {
+  transform: scale(1.15);
+}
+
+.ball-bubble.four {
+  background: var(--up);
+  border-color: #8be596;
+}
+
+.ball-bubble.six {
+  background: var(--sun);
+  color: #2a2620;
+  border-color: #ffeaa7;
+}
+
+.ball-bubble.wicket {
+  background: var(--go);
+  border-color: #ff7675;
+}
+
+/* Wagon Wheel Canvas */
+.radar-box {
+  background: var(--card);
+  border-radius: 20px;
+  border: 1px solid var(--edge);
+  box-shadow: 0 3px 0 var(--ledge);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.radar-canvas-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--pitch) 0%, var(--pitch-deep) 100%);
+  border: 3px solid var(--edge);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+#wagonCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Commentary Ticker */
+.commentary-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.comm-entry {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--edge);
+  font-size: 13.5px;
+  line-height: 1.3;
+}
+
+.comm-entry.boundary {
+  border-left: 4px solid var(--sun);
+  background: var(--tint-gold);
+}
+
+.comm-entry.wicket {
+  border-left: 4px solid var(--go);
+  background: var(--tint-down);
+}
+
+.comm-ball {
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--soft);
+}
+
+/* Bottom Tab Navigation Bar */
+.bottom-tabs {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 520px);
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 6px 8px calc(8px + var(--bottom));
+  z-index: 50;
+}
+
+@media (min-width: 900px) {
+  .bottom-tabs {
+    width: min(100%, 620px);
+  }
+}
+
+.tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: none;
+  border: 0;
+  color: var(--soft);
+  font-family: var(--display);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.15s, transform 0.1s;
+}
+
+.tab-btn:active {
+  transform: scale(0.92);
+}
+
+.tab-btn.active {
+  color: var(--go);
+  font-weight: 800;
+}
+
+.tab-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.tab-btn.match-tab .tab-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--go);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  margin-top: -18px;
+  box-shadow: 0 4px 8px rgba(199, 56, 36, 0.4);
+  font-size: 22px;
+  border: 3px solid var(--card);
+}
+
+/* League Table */
+.league-table-wrap {
+  overflow-x: auto;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid var(--edge);
+  box-shadow: 0 3px 0 var(--ledge);
+}
+
+table.league-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+table.league-tbl th {
+  padding: 10px 8px;
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--soft);
+  border-bottom: 2px solid var(--line);
+  text-align: right;
+}
+
+table.league-tbl th:nth-child(2) {
+  text-align: left;
+}
+
+table.league-tbl td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--num);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--soft);
+  text-align: right;
+}
+
+table.league-tbl td.club-name {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  text-align: left;
+  white-space: nowrap;
+}
+
+table.league-tbl td.pts {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+table.league-tbl tr.user-row td {
+  background: rgba(46, 139, 57, 0.12);
+  color: var(--pitch);
+}
+
+table.league-tbl tr.user-row td.club-name {
+  color: var(--pitch);
+  font-weight: 800;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 38, 32, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-sheet {
+  background: var(--bg);
+  width: min(100%, 460px);
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 24px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--k-shadow-pop);
+  animation: slideUp 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+  border: 1px solid var(--edge);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px) scale(0.97); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Big Chance Interactive Arena */
+.big-chance-arena {
+  background: repeating-linear-gradient(90deg, #ffffff08 0, #ffffff08 30px, #00000008 30px, #00000008 60px),
+              linear-gradient(135deg, #1c4b24 0%, #0d2812 100%);
+  color: #fff;
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.chance-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chance-badge {
+  background: var(--go);
+  color: #fff;
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  padding: 3px 12px;
+  border-radius: 999px;
+  animation: pulse-live 1.2s infinite;
+}
+
+/* Interactive Timing Bar */
+.timing-meter-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timing-track {
+  position: relative;
+  height: 38px;
+  background: #222;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+}
+
+.timing-zone {
+  height: 100%;
+}
+
+.timing-zone.red { background: #e74c3c; flex: 2; }
+.timing-zone.yellow { background: #f39c12; flex: 1.5; }
+.timing-zone.green {
+  background: #2ecc71;
+  flex: 1.2;
+  position: relative;
+}
+
+.timing-zone.green::after {
+  content: "SWEET SPOT";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--num);
+  font-weight: 800;
+  font-size: 11px;
+  color: #0d461f;
+  letter-spacing: 0.05em;
+}
+
+.timing-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  background: #fff;
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+  border-radius: 4px;
+  left: 0%;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+/* Shot / Delivery Choice Grid */
+.choices-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.choice-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: all 0.12s;
+  color: #fff;
+}
+
+.choice-card:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.choice-card.selected {
+  background: var(--sun);
+  color: #2a2620;
+  border-color: #fff;
+  font-weight: 800;
+  transform: scale(1.02);
+}
+
+.choice-card b {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.choice-card small {
+  font-size: 11.5px;
+  opacity: 0.85;
+}
+
+/* Pitch Targeting Map (Bowling) */
+.pitch-aim-box {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border-radius: 14px;
+  background: #7d6545;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.pitch-stumps {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 14px;
+  background: #ffd79a;
+  border-radius: 2px;
+  border: 1px solid #333;
+}
+
+.pitch-target-marker {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px dashed #fff;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: pulse-marker 1s infinite alternate;
+}
+
+@keyframes pulse-marker {
+  from { transform: translate(-50%, -50%) scale(0.9); }
+  to { transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* Facility Upgrade Rows */
+.facility-card {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--edge);
+  box-shadow: 0 2px 0 var(--edge);
+}
+
+.facility-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--well);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+}
+
+.facility-details h4 {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.facility-details p {
+  font-size: 12.5px;
+  color: var(--soft);
+}
+
+/* Transfer Market Card */
+.market-row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--edge);
+  box-shadow: 0 2px 0 var(--edge);
+}
+
+/* Scrollbar Polish */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--edge);
+  border-radius: 999px;
+}
+
+  </style>
+
+  <script>
+    try {
+      if (localStorage.getItem('wl_theme') === 'dark') {
+        document.documentElement.dataset.theme = 'dark';
+        document.querySelector('meta[name=theme-color]').content = '#1b1814';
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- Top Header Bar -->
+    <header class="top-bar">
+      <div class="brand-badge" id="brandHeader" onclick="window.cricketApp.switchTab('home')">
+        <img src="assets/logo.jpg" alt="Logo" class="brand-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <span style="display:none; font-size:26px;">🏏</span>
+        <div class="brand-details">
+          <h1 id="topClubName">Willowbrook CC</h1>
+          <span id="topDivName">Div 4 (Village) • W1</span>
+        </div>
+      </div>
+
+      <div class="top-pills">
+        <div class="pill-coin" id="coinBalancePill">
+          <span class="coin-icon"></span>
+          <span id="topCoins">£1,800</span>
+        </div>
+
+        <button class="icon-btn" id="muteToggle" title="Toggle Sound FX">🔊</button>
+        <button class="icon-btn" id="themeToggle" title="Toggle Dark/Light Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Screens Container -->
+    <main class="screen-container">
+
+      <!-- ================= 1. HOME / PAVILION TAB ================= -->
+      <section id="tab-home" class="screen-content" style="display: flex; flex-direction: column; gap: 14px;">
+        <!-- Ground Hero Banner -->
+        <div class="ground-hero" id="groundHeroBanner">
+          <div class="ground-tag-wrap">
+            <span class="ground-tag">🏟️ Home Ground</span>
+            <span class="ground-tag" id="homeSeasonTag">Season 1</span>
+          </div>
+          <div class="ground-info">
+            <h2 id="groundHeroTitle">The Village Green</h2>
+            <p id="groundHeroSub">Village Green (Cap: 220) • £6/ticket</p>
+          </div>
+        </div>
+
+        <!-- Next Match Card -->
+        <div class="fixture-card">
+          <div class="fixture-header">
+            <span>UPCOMING LEAGUE FIXTURE</span>
+            <span class="fixture-badge" id="nextMatchPitch">🌱 Green Seamer</span>
+          </div>
+
+          <div class="teams-clash">
+            <div class="team-pill">
+              <div class="team-crest" id="userCrest">WCK</div>
+              <b id="userClubFixtureName">Willowbrook</b>
+              <span>Home</span>
+            </div>
+
+            <div class="vs-pill">VS</div>
+
+            <div class="team-pill">
+              <div class="team-crest" id="nextOppCrest">BWG</div>
+              <b id="nextOppName">Bramblewood</b>
+              <span>Away</span>
+            </div>
+          </div>
+
+          <div class="match-actions">
+            <button class="btn-go" id="btnPlayFixture">
+              🏏 PLAY MATCH
+            </button>
+          </div>
+        </div>
+
+        <!-- Club Performance Tiles -->
+        <div class="tiles-grid">
+          <div class="tile">
+            <span>League Rank</span>
+            <b id="tileLeaguePos">1st</b>
+            <small>Promotion Zone</small>
+          </div>
+          <div class="tile">
+            <span>Points</span>
+            <b id="tileLeaguePts">0 pts</b>
+            <small>Village Sunday</small>
+          </div>
+          <div class="tile">
+            <span>Squad Roster</span>
+            <b id="tileSquadSize">15 men</b>
+            <small>Full Fitness</small>
+          </div>
+        </div>
+
+        <!-- Press & Gossip News Feed -->
+        <div class="news-box">
+          <h3>The Village Pavilion Gazette</h3>
+          <div id="homeNewsList" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. SQUAD & LINEUP TAB ================= -->
+      <section id="tab-squad" class="screen-content" style="display: none; flex-direction: column; gap: 14px;">
+        <div class="lineup-header">
+          <div>
+            <h2>Matchday Squad</h2>
+            <p style="font-size: 13px; color: var(--soft);">Tap any player to inspect, assign roles, or change orders.</p>
+          </div>
+        </div>
+
+        <!-- Tactics Selector -->
+        <div class="card flat">
+          <h3 style="font-size: 13px; font-weight: 800; color: var(--soft); text-transform: uppercase; margin-bottom: 8px;">
+            Tactical Instructions
+          </h3>
+          <div class="tactics-box">
+            <div class="tactic-item">
+              <label for="tacticBatting">Batting Approach</label>
+              <select id="tacticBatting" class="tactic-select">
+                <option value="cautious">Cautious (Preserve Wickets)</option>
+                <option value="normal" selected>Balanced (Standard)</option>
+                <option value="aggressive">Aggressive (Attack)</option>
+                <option value="blitz">T20 Blitz (Maximum Attack)</option>
+              </select>
+            </div>
+            <div class="tactic-item">
+              <label for="tacticField">Field Placement</label>
+              <select id="tacticField" class="tactic-select">
+                <option value="attacking">Aggressive Slips & Gully</option>
+                <option value="balanced" selected>Balanced Ring Field</option>
+                <option value="defensive">Deep Boundary Defense</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Squad List -->
+        <div id="squadPlayerList" class="player-list">
+          <!-- Rendered by app.js -->
+        </div>
+      </section>
+
+      <!-- ================= 3. MATCHDAY LIVE ARENA TAB ================= -->
+      <section id="tab-match" class="screen-content" style="display: none; flex-direction: column; gap: 14px;">
+        <!-- Matchday Live Board -->
+        <div class="matchday-board" id="matchdayBoard">
+          <div class="match-status-bar">
+            <span class="live-badge">● LIVE IN PLAY</span>
+            <span id="liveTargetLabel" style="font-size: 13px; font-weight: 700; color: var(--sun);">Current RR: 0.0</span>
+          </div>
+
+          <div class="live-scoreline">
+            <div class="score-main">
+              <span id="liveRunsWickets">0/0</span>
+              <span class="score-overs" id="liveOvers">(0.0 ov)</span>
+            </div>
+            <div class="score-rates">
+              <b id="liveBatTeam">Willowbrook CC</b>
+              <span>First Innings</span>
+            </div>
+          </div>
+
+          <!-- Active Crease Striker, Non-Striker & Bowler -->
+          <div class="crease-strip">
+            <div class="crease-player" id="liveStriker">
+              <b>Striker</b>
+              <span>0 (0b)</span>
+            </div>
+            <div class="crease-player" id="liveNonStriker">
+              <b>Non-Striker</b>
+              <span>0 (0b)</span>
+            </div>
+            <div class="crease-player" id="liveBowler">
+              <b>Bowler</b>
+              <span>0/0 (0 ov)</span>
+            </div>
+          </div>
+
+          <!-- Over Timeline Track -->
+          <div>
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; opacity: 0.8; margin-bottom: 4px;">
+              Current Over
+            </div>
+            <div class="over-balls-track" id="overBallsTrack">
+              <!-- Ball bubbles rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Wagon Wheel 2D Radar Canvas -->
+        <div class="radar-box">
+          <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <b style="font-size: 14px;">Live Wagon Wheel</b>
+            <div style="display: flex; gap: 10px; font-size: 12px; font-weight: 700;">
+              <span style="color: var(--sun);">● Sixes</span>
+              <span style="color: var(--up);">● Fours</span>
+              <span style="color: var(--soft);">● Runs</span>
+            </div>
+          </div>
+          <div class="radar-canvas-wrap">
+            <canvas id="wagonCanvas" width="220" height="220"></canvas>
+          </div>
+        </div>
+
+        <!-- Live Commentary Feed -->
+        <div class="card flat">
+          <h3 style="margin-bottom: 8px;">Ball-by-Ball Commentary</h3>
+          <div class="commentary-wrap" id="commList">
+            <!-- Commentary entries rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. LEAGUE STANDINGS TAB ================= -->
+      <section id="tab-league" class="screen-content" style="display: none; flex-direction: column; gap: 14px;">
+        <div>
+          <h2>League Standings</h2>
+          <p style="font-size: 13px; color: var(--soft);">Top 2 clubs earn promotion to the next tier.</p>
+        </div>
+
+        <div id="leagueTableContent">
+          <!-- Rendered by app.js -->
+        </div>
+      </section>
+
+      <!-- ================= 5. CAMPUS & FACILITIES TAB ================= -->
+      <section id="tab-campus" class="screen-content" style="display: none; flex-direction: column; gap: 14px;">
+        <div>
+          <h2>Club Campus & Ground</h2>
+          <p style="font-size: 13px; color: var(--soft);">Upgrade facilities to boost gate receipts and team development.</p>
+        </div>
+
+        <!-- Ground Upgrades -->
+        <div class="card" id="campusGroundCard">
+          <!-- Rendered by app.js -->
+        </div>
+
+        <!-- Club Training Facilities -->
+        <div>
+          <h3 style="margin-bottom: 8px;">Club Infrastructure</h3>
+          <div id="facilitiesList" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+
+        <!-- Transfer Market -->
+        <div>
+          <h3 style="margin-bottom: 8px;">Transfer Market & Scouting</h3>
+          <div id="transferMarketList" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-tabs">
+      <button class="tab-btn active" data-tab="home" id="tabBtnHome">
+        <span class="tab-icon">🏟️</span>
+        <span>Pavilion</span>
+      </button>
+
+      <button class="tab-btn" data-tab="squad" id="tabBtnSquad">
+        <span class="tab-icon">🏏</span>
+        <span>XI & Squad</span>
+      </button>
+
+      <button class="tab-btn match-tab" data-tab="match" id="tabBtnMatch">
+        <div class="tab-icon-wrap">⚡</div>
+        <span>Matchday</span>
+      </button>
+
+      <button class="tab-btn" data-tab="league" id="tabBtnLeague">
+        <span class="tab-icon">🏆</span>
+        <span>League</span>
+      </button>
+
+      <button class="tab-btn" data-tab="campus" id="tabBtnCampus">
+        <span class="tab-icon">🏛️</span>
+        <span>Campus</span>
+      </button>
+    </nav>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- 1. Toss Modal -->
+    <div class="modal-overlay" id="tossModal" style="display: none;">
+      <div class="modal-sheet" style="text-align: center;">
+        <span style="font-size: 48px;">🪙</span>
+        <h2>Matchday Toss</h2>
+        <p style="color: var(--soft);">The captains meet in the middle for the coin toss on the green.</p>
+        <p style="font-size: 14px; font-weight: 700; color: var(--ink);">What will you choose if you win the toss?</p>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button class="btn-go" id="btnTossBat">🏏 BAT FIRST</button>
+          <button class="btn-secondary" id="btnTossBowl" style="flex: 1;">🎯 BOWL FIRST</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Big Chance Interactive Arena Modal -->
+    <div class="modal-overlay" id="bigChanceModal" style="display: none;">
+      <div class="modal-sheet" id="bigChanceBody">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- 3. Player Card Modal -->
+    <div class="modal-overlay" id="playerModal" style="display: none;">
+      <div class="modal-sheet" id="playerModalBody">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- 4. Post-Match Celebration Modal -->
+    <div class="modal-overlay" id="celebrationModal" style="display: none;">
+      <div class="modal-sheet" id="celebrationBody">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Combined JavaScript Modules -->
+  <script>
+    // --- 1. Sound Synthesizer (sound.js) ---
+// Web Audio API Sound Synthesizer for Willow & Leather Cricket Manager
+// Zero external assets required, 100% synthesized realistic cricket sound effects
+
+class CricketAudio {
+  constructor() {
+    this.ctx = null;
+    this.muted = localStorage.getItem('wl_muted') === 'true';
+    this.initContext();
+  }
+
+  initContext() {
+    if (!this.ctx && typeof AudioContext !== 'undefined') {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioCtx();
+      } catch (e) {
+        console.warn('AudioContext init failed', e);
+      }
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      const resume = () => {
+        this.ctx.resume();
+        window.removeEventListener('click', resume);
+        window.removeEventListener('keydown', resume);
+        window.removeEventListener('touchstart', resume);
+      };
+      window.addEventListener('click', resume);
+      window.addEventListener('keydown', resume);
+      window.addEventListener('touchstart', resume);
+    }
+  }
+
+  toggleMute() {
+    this.muted = !this.muted;
+    localStorage.setItem('wl_muted', this.muted);
+    return this.muted;
+  }
+
+  // Willow Bat hitting Leather Cricket Ball (Sharp wooden woody snap)
+  playBatCrack(isSix = false) {
+    if (this.muted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    
+    // Impact impulse
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(isSix ? 480 : 380, t);
+    osc.frequency.exponentialRampToValueAtTime(110, t + 0.08);
+
+    gain.gain.setValueAtTime(isSix ? 0.9 : 0.65, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + (isSix ? 0.12 : 0.08));
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.15);
+
+    // Wood body resonance noise
+    const bufferSize = this.ctx.sampleRate * 0.06;
+    const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.2));
+    }
+    const whiteNoise = this.ctx.createBufferSource();
+    whiteNoise.buffer = noiseBuffer;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1400, t);
+    filter.Q.setValueAtTime(3.5, t);
+
+    const noiseGain = this.ctx.createGain();
+    noiseGain.gain.setValueAtTime(isSix ? 0.6 : 0.4, t);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+
+    whiteNoise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(this.ctx.destination);
+
+    whiteNoise.start(t);
+    whiteNoise.stop(t + 0.07);
+
+    if (isSix) {
+      setTimeout(() => this.playCrowdCheer(false), 80);
+    }
+  }
+
+  // Stumps Rattling / Timber Bowled
+  playStumpsClatter() {
+    if (this.muted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    
+    // Multiple wooden bail & stump knocks in rapid succession
+    const clatters = [
+      { delay: 0.00, freq: 520, decay: 0.09 },
+      { delay: 0.03, freq: 680, decay: 0.08 },
+      { delay: 0.07, freq: 390, decay: 0.11 },
+      { delay: 0.12, freq: 820, decay: 0.06 }
+    ];
+
+    clatters.forEach(c => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(c.freq, t + c.delay);
+      osc.frequency.exponentialRampToValueAtTime(120, t + c.delay + c.decay);
+
+      gain.gain.setValueAtTime(0.7, t + c.delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + c.delay + c.decay);
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1200, t + c.delay);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(t + c.delay);
+      osc.stop(t + c.delay + c.decay + 0.02);
+    });
+
+    setTimeout(() => this.playHowzat(), 150);
+  }
+
+  // Crowd cheer / applause roar
+  playCrowdCheer(isLong = true) {
+    if (this.muted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    const duration = isLong ? 2.2 : 1.2;
+    const t = this.ctx.currentTime;
+    const bufferSize = this.ctx.sampleRate * duration;
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    // Filtered pinkish crowd roar noise
+    let b0 = 0, b1 = 0, b2 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99 * b0 + white * 0.05;
+      b1 = 0.96 * b1 + white * 0.11;
+      b2 = 0.86 * b2 + white * 0.25;
+      const pink = b0 + b1 + b2 + white * 0.1;
+      data[i] = pink * 0.35;
+    }
+
+    const source = this.ctx.createBufferSource();
+    source.buffer = buffer;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(800, t);
+    filter.frequency.exponentialRampToValueAtTime(1600, t + 0.4);
+    filter.frequency.exponentialRampToValueAtTime(600, t + duration);
+
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(0.01, t);
+    gain.gain.linearRampToValueAtTime(0.4, t + 0.3);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    source.start(t);
+    source.stop(t + duration);
+  }
+
+  // Umpire Whistle / Howzat Appeal Horn
+  playHowzat() {
+    if (this.muted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.linearRampToValueAtTime(740, t + 0.18);
+
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.3, t + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.26);
+  }
+
+  // Tactile UI click
+  playClick() {
+    if (this.muted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(750, t);
+    osc.frequency.exponentialRampToValueAtTime(240, t + 0.03);
+
+    gain.gain.setValueAtTime(0.2, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.04);
+  }
+
+  // Coin / Revenue chime
+  playCoin() {
+    if (this.muted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    [987.77, 1318.51].forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const start = t + idx * 0.08;
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, start);
+
+      gain.gain.setValueAtTime(0.25, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.25);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.26);
+    });
+  }
+
+  // Boundary fanfare
+  playBoundary() {
+    if (this.muted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    const t = this.ctx.currentTime;
+
+    notes.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const start = t + idx * 0.09;
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, start);
+
+      gain.gain.setValueAtTime(0.3, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.22);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.24);
+    });
+  }
+}
+
+window.cricketAudio = new CricketAudio();
+
+
+    // --- 2. Cricket Data & Player Generator (data.js) ---
+// Data & Content Engine for Willow & Leather Cricket Club Manager
+
+const CRICKET_DATA = {
+  DIVISIONS: [
+    {
+      id: 4,
+      name: "Village Sunday League",
+      short: "Div 4 (Village)",
+      prize: 1200,
+      minOvers: 5,
+      clubs: [
+        { id: "c1", name: "Willow Creek CC", color: "#2d6a4f", accent: "#d8f3dc", short: "WCK", rep: 35 },
+        { id: "c2", name: "Bramblewood Greens", color: "#1b4332", accent: "#e9c46a", short: "BWG", rep: 32 },
+        { id: "c3", name: "Millpond Rangers", color: "#3a506b", accent: "#b5e2fa", short: "MPR", rep: 30 },
+        { id: "c4", name: "Oakham Village CC", color: "#6b4226", accent: "#f3c68f", short: "OAK", rep: 33 },
+        { id: "c5", name: "Highfield Strollers", color: "#8b2635", accent: "#f7d6d0", short: "HFS", rep: 28 },
+        { id: "c6", name: "Meadowbrook XI", color: "#2b2d42", accent: "#edf2f4", short: "MBK", rep: 34 }
+      ]
+    },
+    {
+      id: 3,
+      name: "District Championship",
+      short: "Div 3 (District)",
+      prize: 3500,
+      minOvers: 5,
+      clubs: [
+        { id: "c7", name: "Thames Valley Strikers", color: "#1d3557", accent: "#a8dadc", short: "TVS", rep: 48 },
+        { id: "c8", name: "Cotswold Royals", color: "#4a154b", accent: "#e8c547", short: "CWR", rep: 50 },
+        { id: "c9", name: "Beacon Hill CC", color: "#bc4749", accent: "#f2e8cf", short: "BHC", rep: 46 },
+        { id: "c10", name: "Severn Valley Rhinos", color: "#386641", accent: "#a7c957", short: "SVR", rep: 49 },
+        { id: "c11", name: "Northern Peaks XI", color: "#283618", accent: "#dda15e", short: "NPK", rep: 47 },
+        { id: "c12", name: "Wessex Dragons", color: "#9e2a2b", accent: "#ffddd2", short: "WSX", rep: 52 }
+      ]
+    },
+    {
+      id: 2,
+      name: "County Championship",
+      short: "Div 2 (County)",
+      prize: 9000,
+      minOvers: 5,
+      clubs: [
+        { id: "c13", name: "Yorkshire Blades", color: "#003049", accent: "#669bbc", short: "YOR", rep: 68 },
+        { id: "c14", name: "Surrey Lions", color: "#780000", accent: "#fdf0d5", short: "SUR", rep: 72 },
+        { id: "c15", name: "Lancashire Storm", color: "#c1121f", accent: "#fdf0d5", short: "LAN", rep: 70 },
+        { id: "c16", name: "Warwickshire Bears", color: "#005f73", accent: "#94d2bd", short: "WAR", rep: 66 },
+        { id: "c17", name: "Hampshire Hawks", color: "#0a9396", accent: "#ee9b00", short: "HAM", rep: 69 },
+        { id: "c18", name: "Nottingham Stags", color: "#2b9348", accent: "#80b918", short: "NOT", rep: 67 }
+      ]
+    },
+    {
+      id: 1,
+      name: "Premier Super League",
+      short: "Div 1 (Premier)",
+      prize: 25000,
+      minOvers: 5,
+      clubs: [
+        { id: "c19", name: "London Lords XI", color: "#14213d", accent: "#fca311", short: "LON", rep: 88 },
+        { id: "c20", name: "Mumbai Typhoons", color: "#0077b6", accent: "#ffd166", short: "MUM", rep: 92 },
+        { id: "c21", name: "Melbourne Thunder", color: "#2b9348", accent: "#55a630", short: "MEL", rep: 89 },
+        { id: "c22", name: "Kolkata Knights", color: "#5a189a", accent: "#e0aaff", short: "KOL", rep: 87 },
+        { id: "c23", name: "Sydney Comets", color: "#d90429", accent: "#ef233c", short: "SYD", rep: 90 },
+        { id: "c24", name: "Lahore Leopards", color: "#004b23", accent: "#38b000", short: "LAH", rep: 86 }
+      ]
+    }
+  ],
+
+  PITCH_TYPES: {
+    green: {
+      name: "Green Seamer",
+      desc: "Lush grass cover. Fierce seam movement and extra bounce for fast pacers.",
+      paceBonus: 1.25,
+      spinBonus: 0.85,
+      batBonus: 0.88,
+      wearRate: 0.8,
+      icon: "🌱"
+    },
+    dusty: {
+      name: "Dusty Turner",
+      desc: "Dry and cracking. Generates wicked bite, grip and venomous spin.",
+      paceBonus: 0.85,
+      spinBonus: 1.35,
+      batBonus: 0.90,
+      wearRate: 1.4,
+      icon: "🏜️"
+    },
+    flat: {
+      name: "Flat Highway",
+      desc: "Hard rolled batting paradise. High scores, true bounce, and fireworks.",
+      paceBonus: 0.95,
+      spinBonus: 0.90,
+      batBonus: 1.25,
+      wearRate: 1.0,
+      icon: "🛣️"
+    },
+    bouncy: {
+      name: "Hard & Bouncy",
+      desc: "Stiff clay foundation. Terrific carry to keeper and rewards crisp pull shots.",
+      paceBonus: 1.15,
+      spinBonus: 0.95,
+      batBonus: 1.05,
+      wearRate: 1.1,
+      icon: "⚡"
+    }
+  },
+
+  GROUND_LEVELS: [
+    {
+      level: 1,
+      name: "The Village Green",
+      capacity: 220,
+      ticketPrice: 6,
+      upgradeCost: 1500,
+      image: "assets/village_ground.jpg",
+      perk: "Bake sale tea tent & white picket boundary."
+    },
+    {
+      level: 2,
+      name: "Township Oval",
+      capacity: 950,
+      ticketPrice: 12,
+      upgradeCost: 4200,
+      image: "assets/village_ground.jpg",
+      perk: "Wooden stands, manual tin scoreboard, and pavilion bar."
+    },
+    {
+      level: 3,
+      name: "County Grounds",
+      capacity: 4800,
+      ticketPrice: 24,
+      upgradeCost: 11000,
+      image: "assets/village_ground.jpg",
+      perk: "Covered grandstand, sight screens, and official media box."
+    },
+    {
+      level: 4,
+      name: "Metropolitan Arena",
+      capacity: 18500,
+      ticketPrice: 42,
+      upgradeCost: 28000,
+      image: "assets/lords_stadium.jpg",
+      perk: "Towering floodlights, electronic replay screens & fan store."
+    },
+    {
+      level: 5,
+      name: "Lord's Colosseum",
+      capacity: 46000,
+      ticketPrice: 75,
+      upgradeCost: 0,
+      image: "assets/lords_stadium.jpg",
+      perk: "World-class cathedral of cricket with champagne terrace."
+    }
+  ],
+
+  FACILITIES: [
+    {
+      id: "nets",
+      name: "Practice Nets",
+      level: 1,
+      maxLevel: 4,
+      baseCost: 800,
+      desc: "Improves player training XP and batting/bowling accuracy.",
+      perk: "+10% Player skill growth per week"
+    },
+    {
+      id: "physio",
+      name: "Physiotherapy Suite",
+      level: 1,
+      maxLevel: 4,
+      baseCost: 700,
+      desc: "Helps squad fitness and faster stamina recovery between fixtures.",
+      perk: "+15% Weekly stamina recovery"
+    },
+    {
+      id: "curator",
+      name: "Master Pitch Curator",
+      level: 1,
+      maxLevel: 3,
+      baseCost: 1200,
+      desc: "Grants ability to handpick pitch preparation for home matches.",
+      perk: "Tailor pitch conditions to your bowling attack"
+    },
+    {
+      id: "academy",
+      name: "Youth Scouting Academy",
+      level: 1,
+      maxLevel: 4,
+      baseCost: 1500,
+      desc: "Scouts hidden village talent and teenage bowling prodigies.",
+      perk: "Generates free youth prospects each season"
+    }
+  ],
+
+  SPONSORS: [
+    { id: "sp1", name: "Ye Olde Village Bakery", weekly: 180, divMin: 4, desc: "Fresh pies and cream tea for the team." },
+    { id: "sp2", name: "County Motors & Garage", weekly: 420, divMin: 3, desc: "Reliable team minibus and travel sponsorship." },
+    { id: "sp3", name: "Gunn & Willow Crafts", weekly: 950, divMin: 2, desc: "Custom Grade-1 English willow bats for squad." },
+    { id: "sp4", name: "Apex Energy Drink", weekly: 2200, divMin: 1, desc: "Global energy brand with stadium LED branding." }
+  ],
+
+  NAME_BANK: {
+    first: [
+      "Oliver", "Jack", "Harry", "George", "William", "Albie", "James", "Freddie",
+      "Rohit", "Virat", "Jasprit", "Ravindra", "Shubman", "Rishabh", "Sachin", "Sunil",
+      "Mitchell", "Pat", "David", "Steve", "Glenn", "Travis", "Shane", "Ricky",
+      "Ben", "Joe", "Jofra", "Jos", "Stuart", "Jimmy", "Eoin", "Graeme",
+      "Babar", "Shaheen", "Wasim", "Waqar", "Imran", "Haris", "Rizwan",
+      "Kane", "Trent", "Tim", "Brendon", "Ross", "Devon",
+      "Kagiso", "Dale", "Quinton", "AB", "Jacques", "Faf",
+      "Chris", "Brian", "Viv", "Andre", "Kieron", "Curtly", "Jason"
+    ],
+    last: [
+      "Broad", "Anderson", "Root", "Stokes", "Buttler", "Cook", "Flintoff", "Bell",
+      "Sharma", "Kohli", "Bumrah", "Jadeja", "Gill", "Pant", "Tendulkar", "Ashwin",
+      "Starc", "Cummins", "Warner", "Smith", "Maxwell", "Head", "Warne", "Ponting",
+      "Afridi", "Akram", "Younis", "Khan", "Rauf", "Malik",
+      "Williamson", "Boult", "Southee", "McCullum", "Taylor", "Conway",
+      "Rabada", "Steyn", "de Kock", "de Villiers", "Kallis", "du Plessis",
+      "Gayle", "Lara", "Richards", "Russell", "Pollard", "Ambrose", "Holder",
+      "Archer", "Brook", "Wood", "Woakes", "Ali", "Bairstow", "Pope"
+    ]
+  },
+
+  ROLES: [
+    { id: "OPEN_BAT", label: "Opening Batter", type: "BAT", desc: "Specialist in facing new ball pace & swing." },
+    { id: "TOP_BAT", label: "Top-Order Batter", type: "BAT", desc: "Anchor who builds high scoring partnerships." },
+    { id: "MID_BAT", label: "Middle-Order Anchor", type: "BAT", desc: "Solid against both spin and medium pace." },
+    { id: "FINISHER", label: "Power Finisher", type: "BAT", desc: "Deadly boundary hitter in death overs." },
+    { id: "WK_BAT", label: "Wicketkeeper Batter", type: "WK", desc: "Quick reflexes behind stumps & agile batting." },
+    { id: "BAT_ALL", label: "Batting All-Rounder", type: "ALL", desc: "Top batsman who chips in with key overs." },
+    { id: "BOWL_ALL", label: "Bowling All-Rounder", type: "ALL", desc: "Frontline bowler with explosive lower-order batting." },
+    { id: "FAST_BOWL", label: "Fast Seamer", type: "BOWL", desc: "Speeds up to 145+ km/h with dangerous seam bounce." },
+    { id: "SWING_BOWL", label: "Swing Bowler", type: "BOWL", desc: "Moves the red cherry both ways in the air." },
+    { id: "SPIN_BOWL", label: "Mystery Spinner", type: "BOWL", desc: "Wrist spin, googlies & arm balls that bamboozle." }
+  ],
+
+  TRAITS: [
+    "Clutch Finisher",
+    "Death Yorker Specialist",
+    "Powerplay Blaster",
+    "Spin Magician",
+    "Steep Bouncer Enforcer",
+    "Rock-Solid Anchor",
+    "Golden Arm",
+    "Safe Hands Slip Fielder",
+    "Boundary Rider Bullet Arm",
+    "Speed Demon"
+  ],
+
+  // Interactive Big Chance Shots and Deliveries
+  SHOTS: [
+    {
+      id: "cover_drive",
+      name: "Cover Drive",
+      type: "ground",
+      idealAgainst: ["full", "outswing"],
+      risk: "medium",
+      reward: "high",
+      runsOutcome: [4, 4, 2, 1, 0],
+      desc: "Classy leaning drive through extra cover along the turf."
+    },
+    {
+      id: "pull_shot",
+      name: "Pull / Hook",
+      type: "aerial",
+      idealAgainst: ["short", "bouncer"],
+      risk: "high",
+      reward: "maximum",
+      runsOutcome: [6, 6, 4, 1, "W"],
+      desc: "Ferocious pivot swatting the ball into the mid-wicket stands."
+    },
+    {
+      id: "straight_drive",
+      name: "Lofted Straight Drive",
+      type: "aerial",
+      idealAgainst: ["full", "half_volley"],
+      risk: "high",
+      reward: "maximum",
+      runsOutcome: [6, 6, 4, 2, "W"],
+      desc: "Elevated high-elbow drive soaring straight back over the bowler."
+    },
+    {
+      id: "flick",
+      name: "Helicopter / Flick",
+      type: "aerial",
+      idealAgainst: ["yorker", "inswing", "straight"],
+      risk: "medium",
+      reward: "high",
+      runsOutcome: [6, 4, 4, 2, 1],
+      desc: "Wristy flick with heavy bat speed flashing over cow corner."
+    },
+    {
+      id: "late_cut",
+      name: "Late Cut / Dab",
+      type: "ground",
+      idealAgainst: ["wide", "spin", "outswing"],
+      risk: "low",
+      reward: "medium",
+      runsOutcome: [4, 4, 2, 1, 1],
+      desc: "Delicate touch gliding past slips down to third man."
+    },
+    {
+      id: "block",
+      name: "Forward Defensive",
+      type: "defense",
+      idealAgainst: ["yorker", "inswing", "good_length"],
+      risk: "very_low",
+      reward: "low",
+      runsOutcome: [1, 0, 0, 0, 0],
+      desc: "Rock-solid bat and pad together to preserve your wicket."
+    }
+  ],
+
+  DELIVERIES: [
+    {
+      id: "yorker",
+      name: "In-Dipping Yorker",
+      speed: "144 km/h",
+      length: "yorker",
+      wicketChance: 0.42,
+      dotChance: 0.38,
+      boundaryRisk: 0.20,
+      desc: "Toe-crusher aimed directly at the base of leg stump."
+    },
+    {
+      id: "outswing",
+      name: "Curving Outswinger",
+      speed: "138 km/h",
+      length: "good_length",
+      wicketChance: 0.38,
+      dotChance: 0.45,
+      boundaryRisk: 0.17,
+      desc: "Angles in, pitches on off-stump and shapes away to kiss the outside edge."
+    },
+    {
+      id: "bouncer",
+      name: "Fierce Throat Bouncer",
+      speed: "142 km/h",
+      length: "short",
+      wicketChance: 0.35,
+      dotChance: 0.35,
+      boundaryRisk: 0.30,
+      desc: "Digs hard into the turf rushing towards the batsman's helmet visor."
+    },
+    {
+      id: "slower",
+      name: "Knuckle Slower Ball",
+      speed: "112 km/h",
+      length: "full",
+      wicketChance: 0.40,
+      dotChance: 0.40,
+      boundaryRisk: 0.20,
+      desc: "Deceptive dip in the air; batsman is through the shot way too early!"
+    },
+    {
+      id: "googly",
+      name: "Sharp Turning Googly",
+      speed: "88 km/h",
+      length: "good_length",
+      wicketChance: 0.44,
+      dotChance: 0.36,
+      boundaryRisk: 0.20,
+      desc: "Looks like standard leg-spin but spins violently back through the gate!"
+    }
+  ]
+};
+
+// Player Generation Helper
+function generatePlayer(options = {}) {
+  const firstNames = CRICKET_DATA.NAME_BANK.first;
+  const lastNames = CRICKET_DATA.NAME_BANK.last;
+  const name = `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+  
+  const role = options.role || CRICKET_DATA.ROLES[Math.floor(Math.random() * CRICKET_DATA.ROLES.length)];
+  const repTier = options.tier || 4; // 4 = Village, 1 = Premier
+  
+  // Rating ranges based on tier
+  const baseMin = 40 + (4 - repTier) * 12;
+  const baseMax = 55 + (4 - repTier) * 11;
+  
+  const randStat = (min, max) => Math.min(99, Math.max(30, Math.floor(Math.random() * (max - min + 1)) + min));
+  
+  let bat = randStat(baseMin - 8, baseMax - 4);
+  let timing = randStat(baseMin - 8, baseMax - 4);
+  let power = randStat(baseMin - 8, baseMax - 4);
+  let bowl = randStat(baseMin - 12, baseMax - 8);
+  let accuracy = randStat(baseMin - 12, baseMax - 8);
+  let speed = randStat(baseMin - 12, baseMax - 8);
+  
+  if (role.type === "BAT") {
+    bat = randStat(baseMin + 5, baseMax + 6);
+    timing = randStat(baseMin + 4, baseMax + 7);
+    power = role.id === "FINISHER" ? randStat(baseMin + 8, baseMax + 9) : randStat(baseMin, baseMax + 4);
+    bowl = randStat(30, 48);
+    accuracy = randStat(30, 45);
+  } else if (role.type === "BOWL") {
+    bowl = randStat(baseMin + 5, baseMax + 7);
+    accuracy = randStat(baseMin + 4, baseMax + 6);
+    speed = randStat(baseMin + 3, baseMax + 8);
+    bat = randStat(30, 50);
+    timing = randStat(30, 48);
+    power = randStat(35, 55);
+  } else if (role.type === "ALL") {
+    bat = randStat(baseMin + 1, baseMax + 3);
+    bowl = randStat(baseMin + 1, baseMax + 3);
+    timing = randStat(baseMin, baseMax + 2);
+    accuracy = randStat(baseMin, baseMax + 2);
+    power = randStat(baseMin, baseMax + 4);
+  } else if (role.type === "WK") {
+    bat = randStat(baseMin + 2, baseMax + 5);
+    timing = randStat(baseMin + 2, baseMax + 5);
+    bowl = randStat(25, 40);
+  }
+  
+  const fielding = randStat(baseMin - 4, baseMax + 4);
+  const age = randStat(18, 35);
+  const trait = CRICKET_DATA.TRAITS[Math.floor(Math.random() * CRICKET_DATA.TRAITS.length)];
+  const form = Math.floor(Math.random() * 3) + 3; // 3 to 5
+  
+  const overall = Math.round(
+    role.type === "BAT" ? (bat * 0.5 + timing * 0.3 + power * 0.2) :
+    role.type === "BOWL" ? (bowl * 0.5 + accuracy * 0.3 + speed * 0.2) :
+    role.type === "ALL" ? (bat * 0.45 + bowl * 0.45 + fielding * 0.1) :
+    (bat * 0.6 + fielding * 0.4)
+  );
+
+  const wage = Math.max(25, Math.round((overall * overall * 0.08) * (5 - repTier) * 0.3));
+  const value = wage * 38;
+
+  // Avatar initials and unique color
+  const initials = name.split(" ").map(n => n[0]).join("");
+  const hues = [12, 35, 145, 195, 220, 275, 330];
+  const avatarColor = `hsl(${hues[Math.floor(Math.random() * hues.length)]}, 65%, 45%)`;
+
+  return {
+    id: "p_" + Math.random().toString(36).substr(2, 9),
+    name,
+    initials,
+    avatarColor,
+    role,
+    age,
+    overall,
+    bat,
+    timing,
+    power,
+    bowl,
+    accuracy,
+    speed,
+    fielding,
+    stamina: 100,
+    maxStamina: 100,
+    form,
+    trait,
+    wage,
+    value,
+    stats: {
+      matches: 0,
+      runs: 0,
+      highScore: 0,
+      hundreds: 0,
+      fifties: 0,
+      ballsFaced: 0,
+      wickets: 0,
+      bestBowling: "0/0",
+      oversBowled: 0,
+      runsConceded: 0,
+      catches: 0
+    }
+  };
+}
+
+// Generate Starter Squad of 15 players for the User
+function generateStarterSquad(tier = 4) {
+  const rolesList = [
+    CRICKET_DATA.ROLES[0], // OPEN_BAT
+    CRICKET_DATA.ROLES[0], // OPEN_BAT
+    CRICKET_DATA.ROLES[1], // TOP_BAT
+    CRICKET_DATA.ROLES[2], // MID_BAT
+    CRICKET_DATA.ROLES[4], // WK_BAT
+    CRICKET_DATA.ROLES[5], // BAT_ALL
+    CRICKET_DATA.ROLES[6], // BOWL_ALL
+    CRICKET_DATA.ROLES[7], // FAST_BOWL
+    CRICKET_DATA.ROLES[8], // SWING_BOWL
+    CRICKET_DATA.ROLES[9], // SPIN_BOWL
+    CRICKET_DATA.ROLES[7], // FAST_BOWL
+    // Bench reserves
+    CRICKET_DATA.ROLES[3], // FINISHER
+    CRICKET_DATA.ROLES[2], // MID_BAT
+    CRICKET_DATA.ROLES[8], // SWING_BOWL
+    CRICKET_DATA.ROLES[9]  // SPIN_BOWL
+  ];
+
+  return rolesList.map(role => generatePlayer({ role, tier }));
+}
+
+window.CRICKET_DATA = CRICKET_DATA;
+window.generatePlayer = generatePlayer;
+window.generateStarterSquad = generateStarterSquad;
+
+
+    // --- 3. Match Simulation Engine & Big Chances (engine.js) ---
+// Match Engine & Interactive Big Chances for Willow & Leather Cricket Manager
+
+class CricketMatchEngine {
+  constructor(matchData) {
+    this.userClub = matchData.userClub;
+    this.oppClub = matchData.oppClub;
+    this.pitch = matchData.pitch || CRICKET_DATA.PITCH_TYPES.flat;
+    this.maxOvers = matchData.maxOvers || 5;
+    this.isHome = matchData.isHome !== false;
+    this.userSquad = matchData.userSquad;
+    this.oppSquad = matchData.oppSquad;
+    this.userTactics = matchData.userTactics || { batting: "normal", bowling: "balanced", field: "balanced" };
+    
+    // Toss & Innings setup
+    this.tossWinner = null;
+    this.userBattedFirst = true;
+    this.currentInnings = 1; // 1 or 2
+    
+    // In-game score tracking
+    this.innings = [
+      this.initInningsState(this.userClub, this.oppClub, true),
+      this.initInningsState(this.oppClub, this.userClub, false)
+    ];
+
+    this.isFinished = false;
+    this.winner = null;
+    this.resultSummary = "";
+    this.activeBigChance = null;
+    this.wagonWheel = []; // Array of { angle, distance, runs, batsman }
+    this.manhattan = [[], []]; // runs per over
+    this.commentary = [];
+    this.callbacks = {};
+  }
+
+  initInningsState(batTeam, bowlTeam, isUserBatting) {
+    return {
+      batTeam,
+      bowlTeam,
+      isUserBatting,
+      totalRuns: 0,
+      wickets: 0,
+      balls: 0,
+      oversStr: "0.0",
+      extras: 0,
+      currentStrikerIdx: 0,
+      currentNonStrikerIdx: 1,
+      currentBowlerIdx: 0,
+      fallOfWickets: [],
+      overRuns: 0,
+      currentOverBalls: [],
+      battingCard: [],
+      bowlingCard: []
+    };
+  }
+
+  setupMatch(userChoseBat = true) {
+    // Determine toss
+    this.tossWinner = Math.random() < 0.5 ? "user" : "opp";
+    if (this.tossWinner === "user") {
+      this.userBattedFirst = userChoseBat;
+    } else {
+      // AI decision: 60% prefer chasing on flat pitch, 60% prefer batting first on green seamer
+      this.userBattedFirst = this.pitch === CRICKET_DATA.PITCH_TYPES.green ? false : Math.random() < 0.5;
+    }
+
+    if (this.userBattedFirst) {
+      this.innings[0] = this.initInningsState(this.userClub, this.oppClub, true);
+      this.innings[1] = this.initInningsState(this.oppClub, this.userClub, false);
+    } else {
+      this.innings[0] = this.initInningsState(this.oppClub, this.userClub, false);
+      this.innings[1] = this.initInningsState(this.userClub, this.oppClub, true);
+    }
+
+    // Populate scorecards
+    this.initScorecards(0);
+    this.initScorecards(1);
+
+    const tossTeamName = this.tossWinner === "user" ? this.userClub.name : this.oppClub.name;
+    const choice = (this.tossWinner === "user" ? this.userBattedFirst : !this.userBattedFirst) ? "bat" : "bowl";
+    this.addCommentary(`🪙 **Toss**: ${tossTeamName} won the toss and elected to **${choice.toUpperCase()}** first on a ${this.pitch.name} pitch.`);
+  }
+
+  initScorecards(innIdx) {
+    const inn = this.innings[innIdx];
+    const batSquad = inn.isUserBatting ? this.userSquad : this.oppSquad;
+    const bowlSquad = inn.isUserBatting ? this.oppSquad : this.userSquad;
+
+    inn.battingCard = batSquad.slice(0, 11).map((p, idx) => ({
+      player: p,
+      runs: 0,
+      balls: 0,
+      fours: 0,
+      sixes: 0,
+      strikeRate: "0.0",
+      isOut: false,
+      howOut: "not out",
+      battingOrder: idx + 1
+    }));
+
+    // Select 3 to 4 frontline bowlers
+    const bowlers = bowlSquad.slice().sort((a, b) => b.bowl - a.bowl).slice(0, 4);
+    inn.bowlingCard = bowlers.map(p => ({
+      player: p,
+      overs: 0,
+      balls: 0,
+      maidens: 0,
+      runs: 0,
+      wickets: 0,
+      economy: "0.0"
+    }));
+  }
+
+  getCurrentInnings() {
+    return this.innings[this.currentInnings - 1];
+  }
+
+  addCommentary(text, type = "normal") {
+    const inn = this.getCurrentInnings();
+    const entry = {
+      ball: inn ? inn.oversStr : "0.0",
+      text,
+      type,
+      time: Date.now()
+    };
+    this.commentary.unshift(entry);
+    if (this.callbacks.onCommentary) {
+      this.callbacks.onCommentary(entry);
+    }
+  }
+
+  // Check if a Big Chance should be presented to the player
+  shouldTriggerBigChance() {
+    const inn = this.getCurrentInnings();
+    if (!inn) return false;
+    
+    // Total balls in innings
+    const totalBalls = this.maxOvers * 6;
+    const currentBall = inn.balls;
+    
+    // Trigger opportunities:
+    // 1. In 2nd over (around ball 8-10)
+    // 2. In 4th over (around ball 20-22)
+    // 3. In the final over crunch (around ball 27-29)
+    if (inn.bigChancesTriggered && inn.bigChancesTriggered >= 2) return false;
+    if (!inn.bigChancesTriggered) inn.bigChancesTriggered = 0;
+
+    const isKeyBall = (currentBall === 7 || currentBall === 18 || (currentBall === 26 && this.currentInnings === 2));
+    if (isKeyBall) {
+      inn.bigChancesTriggered++;
+      return true;
+    }
+    return false;
+  }
+
+  // Simulate next ball (or pause for Big Chance)
+  simulateBall() {
+    if (this.isFinished) return null;
+    const inn = this.getCurrentInnings();
+
+    // Check if innings ended
+    if (inn.wickets >= 10 || inn.balls >= this.maxOvers * 6) {
+      this.endInnings();
+      return { event: "innings_end" };
+    }
+
+    // Check 2nd innings target reached
+    if (this.currentInnings === 2) {
+      const target = this.innings[0].totalRuns + 1;
+      if (inn.totalRuns >= target) {
+        this.finishMatch();
+        return { event: "match_end" };
+      }
+    }
+
+    // Check for Big Chance intervention
+    if (this.shouldTriggerBigChance()) {
+      return this.generateBigChancePayload();
+    }
+
+    return this.executeBallPhysics();
+  }
+
+  generateBigChancePayload() {
+    const inn = this.getCurrentInnings();
+    const striker = inn.battingCard[inn.currentStrikerIdx];
+    const bowler = inn.bowlingCard[inn.currentBowlerIdx];
+
+    if (inn.isUserBatting) {
+      // User Batting Big Chance
+      const delivery = CRICKET_DATA.DELIVERIES[Math.floor(Math.random() * CRICKET_DATA.DELIVERIES.length)];
+      this.activeBigChance = {
+        type: "batting",
+        striker: striker.player,
+        bowler: bowler.player,
+        delivery,
+        shots: CRICKET_DATA.SHOTS
+      };
+      return {
+        event: "big_chance",
+        payload: this.activeBigChance
+      };
+    } else {
+      // User Bowling Big Chance
+      this.activeBigChance = {
+        type: "bowling",
+        striker: striker.player,
+        bowler: bowler.player,
+        deliveries: CRICKET_DATA.DELIVERIES
+      };
+      return {
+        event: "big_chance",
+        payload: this.activeBigChance
+      };
+    }
+  }
+
+  // Resolve user-played Batting Big Chance
+  resolveBattingBigChance(shotId, timingScore) {
+    // timingScore: 0.0 to 1.0 (1.0 = absolute perfect sweet-spot)
+    const inn = this.getCurrentInnings();
+    const striker = inn.battingCard[inn.currentStrikerIdx];
+    const bowler = inn.bowlingCard[inn.currentBowlerIdx];
+    const shot = CRICKET_DATA.SHOTS.find(s => s.id === shotId) || CRICKET_DATA.SHOTS[0];
+    const delivery = this.activeBigChance.delivery;
+
+    let runs = 0;
+    let isWicket = false;
+    let desc = "";
+
+    // Synergy between shot and delivery
+    const hasSynergy = shot.idealAgainst.includes(delivery.length) || shot.idealAgainst.includes(delivery.id);
+    const effectiveTiming = timingScore * (hasSynergy ? 1.2 : 0.95);
+
+    if (effectiveTiming >= 0.85) {
+      // Masterclass timing
+      if (shot.type === "aerial") {
+        runs = 6;
+        desc = `🚀 **BOOM! ${shot.name.toUpperCase()}!** ${striker.player.name} connects with thunderous sweet-spot timing! The cherry sails high and handsome into the stands for SIX!`;
+      } else {
+        runs = 4;
+        desc = `🔥 **GLORIOUS ${shot.name.toUpperCase()}!** ${striker.player.name} plays with surgical precision, piercing the field to the rope for FOUR!`;
+      }
+    } else if (effectiveTiming >= 0.55) {
+      // Decent timing
+      if (shot.id === "block") {
+        runs = Math.random() < 0.4 ? 1 : 0;
+        desc = `🛡️ ${striker.player.name} gets right behind the line with a solid defensive block. Rotates strike safely.`;
+      } else {
+        runs = Math.random() < 0.6 ? 2 : (Math.random() < 0.5 ? 4 : 1);
+        desc = `⚡ ${shot.name} played neatly into the deep gap. Hard running yields ${runs} runs.`;
+      }
+    } else if (effectiveTiming >= 0.28) {
+      // Poor mistimed
+      if (shot.risk === "high") {
+        isWicket = true;
+        desc = `❌ **MISTIMED! OUT!** ${striker.player.name} was through the shot too early! Skied high in the air and safely pouch-held by the fielder!`;
+      } else {
+        runs = 0;
+        desc = `💨 Beaten for pace! Inside edge onto the pad, dot ball.`;
+      }
+    } else {
+      // Complete whiff / misread
+      isWicket = true;
+      desc = `💥 **CLEAN BOWLED!** ${bowler.player.name}'s ${delivery.name} crashes straight into the stumps! Wooden bails flying everywhere!`;
+    }
+
+    this.activeBigChance = null;
+    return this.applyBallResult(runs, isWicket, desc, "big_chance_result");
+  }
+
+  // Resolve user-played Bowling Big Chance
+  resolveBowlingBigChance(deliveryId, accuracyScore, pitchZone) {
+    // accuracyScore: 0.0 to 1.0
+    const inn = this.getCurrentInnings();
+    const striker = inn.battingCard[inn.currentStrikerIdx];
+    const bowler = inn.bowlingCard[inn.currentBowlerIdx];
+    const delivery = CRICKET_DATA.DELIVERIES.find(d => d.id === deliveryId) || CRICKET_DATA.DELIVERIES[0];
+
+    let runs = 0;
+    let isWicket = false;
+    let desc = "";
+
+    if (accuracyScore >= 0.82) {
+      // Pitch-perfect delivery
+      isWicket = true;
+      if (delivery.id === "yorker") {
+        desc = `🎯 **TIMBERRR!** ${bowler.player.name} unleashes an unplayable toe-crusher at ${delivery.speed}! Stumps uprooted! WICKET!`;
+      } else if (delivery.id === "outswing") {
+        desc = `🧤 **EDGED AND TAKEN!** Late outswing lures ${striker.player.name} into the drive, faint feather through to the keeper!`;
+      } else if (delivery.id === "googly") {
+        desc = `🌀 **BAMBOOZLED! LBW!** Batsman had zero clue which way it was spinning! Trapped dead in front!`;
+      } else {
+        desc = `💥 **WICKET!** Brilliant execution of the ${delivery.name}! Batsman deceived completely!`;
+      }
+    } else if (accuracyScore >= 0.45) {
+      // Good line & length
+      runs = Math.random() < 0.7 ? 0 : 1;
+      desc = `🛡️ Tidy ${delivery.name} on off-stump. Batsman defends watchfully into the covers. (${runs} run)`;
+    } else {
+      // Loose delivery
+      runs = Math.random() < 0.5 ? 4 : 2;
+      desc = `⚠️ Slipped down the leg side! ${striker.player.name} swivels and punishes the loose delivery for ${runs} runs.`;
+    }
+
+    this.activeBigChance = null;
+    return this.applyBallResult(runs, isWicket, desc, "big_chance_result");
+  }
+
+  // Standard algorithmic ball calculation
+  executeBallPhysics() {
+    const inn = this.getCurrentInnings();
+    const striker = inn.battingCard[inn.currentStrikerIdx];
+    const bowler = inn.bowlingCard[inn.currentBowlerIdx];
+
+    const pitchBonus = this.pitch;
+    const isUserBat = inn.isUserBatting;
+
+    // Batting factor
+    let batRating = (striker.player.bat * 0.6 + striker.player.timing * 0.4) * (pitchBonus.batBonus || 1.0);
+    // Bowling factor
+    const isPacer = bowler.player.role.type === "BOWL" && bowler.player.role.id.includes("FAST");
+    const bowlMultiplier = isPacer ? (pitchBonus.paceBonus || 1.0) : (pitchBonus.spinBonus || 1.0);
+    let bowlRating = (bowler.player.bowl * 0.6 + bowler.player.accuracy * 0.4) * bowlMultiplier;
+
+    // Tactics modulation
+    const tactics = isUserBat ? this.userTactics : { batting: "normal", field: "balanced" };
+    let aggro = 1.0;
+    if (tactics.batting === "aggressive") aggro = 1.35;
+    if (tactics.batting === "blitz") aggro = 1.7;
+    if (tactics.batting === "cautious") aggro = 0.7;
+
+    const diff = (batRating - bowlRating) / 100; // -0.5 to +0.5
+    const roll = Math.random();
+
+    let runs = 0;
+    let isWicket = false;
+    let desc = "";
+
+    // Wicket probability
+    const wicketThreshold = Math.max(0.04, Math.min(0.24, (0.09 - diff * 0.08) * (aggro > 1.2 ? 1.4 : 1.0)));
+
+    if (roll < wicketThreshold) {
+      isWicket = true;
+      const wTypes = ["Bowled", "Caught at Mid-Wicket", "Caught Behind", "LBW", "Caught at Long-On"];
+      const wType = wTypes[Math.floor(Math.random() * wTypes.length)];
+      desc = `☝️ **OUT! ${wType.toUpperCase()}!** ${striker.player.name} falls! Excellent bowling by ${bowler.player.name}.`;
+    } else {
+      // Runs calculation
+      const sixProb = Math.max(0.02, 0.08 + diff * 0.08) * (aggro > 1.2 ? 1.8 : 0.8);
+      const fourProb = Math.max(0.08, 0.18 + diff * 0.12) * aggro;
+      const singleProb = 0.38;
+      const doubleProb = 0.14;
+
+      const runRoll = Math.random();
+      if (runRoll < sixProb) {
+        runs = 6;
+        desc = `🔥 **SIX!** ${striker.player.name} launches it high over deep mid-wicket into the crowd!`;
+      } else if (runRoll < sixProb + fourProb) {
+        runs = 4;
+        desc = `⚡ **FOUR!** Cracking shot by ${striker.player.name}! Driven powerfully to the boundary fence.`;
+      } else if (runRoll < sixProb + fourProb + doubleProb) {
+        runs = 2;
+        desc = `🏃 Guided into the vacant gap at deep cover. Good hustle for a couple of runs.`;
+      } else if (runRoll < sixProb + fourProb + doubleProb + singleProb) {
+        runs = 1;
+        desc = `🎯 Pushed into the ring for a sharp single. Strike rotated.`;
+      } else {
+        runs = 0;
+        desc = `⚪ Good, tight line and length by ${bowler.player.name}. Defended back to the bowler. Dot ball.`;
+      }
+    }
+
+    return this.applyBallResult(runs, isWicket, desc, isWicket ? "wicket" : (runs >= 4 ? "boundary" : "normal"));
+  }
+
+  // Update scorecards, overs, strike rotation, and wagon wheel
+  applyBallResult(runs, isWicket, desc, eventType = "normal") {
+    const inn = this.getCurrentInnings();
+    const striker = inn.battingCard[inn.currentStrikerIdx];
+    const bowler = inn.bowlingCard[inn.currentBowlerIdx];
+
+    inn.balls++;
+    striker.balls++;
+    bowler.balls++;
+
+    // Calculate over string
+    const completedOvers = Math.floor(inn.balls / 6);
+    const ballsInOver = inn.balls % 6;
+    inn.oversStr = `${completedOvers}.${ballsInOver}`;
+
+    let ballSymbol = runs.toString();
+    if (isWicket) {
+      ballSymbol = "W";
+      inn.wickets++;
+      striker.isOut = true;
+      striker.howOut = `c & b ${bowler.player.name}`;
+      bowler.wickets++;
+      inn.fallOfWickets.push({ score: inn.totalRuns, player: striker.player.name, over: inn.oversStr });
+
+      // Next batsman walks out
+      const nextIdx = Math.max(inn.currentStrikerIdx, inn.currentNonStrikerIdx) + 1;
+      if (nextIdx < inn.battingCard.length) {
+        inn.currentStrikerIdx = nextIdx;
+      }
+    } else {
+      inn.totalRuns += runs;
+      striker.runs += runs;
+      bowler.runs += runs;
+      if (runs === 4) striker.fours++;
+      if (runs === 6) striker.sixes++;
+
+      // Record Wagon Wheel point
+      if (runs > 0) {
+        const angles = { 1: 45, 2: 135, 4: 210, 6: 300 };
+        const angle = (Math.random() * 360) * (Math.PI / 180);
+        const distance = runs === 6 ? 95 : (runs === 4 ? 85 : 45 + Math.random() * 25);
+        this.wagonWheel.push({ angle, distance, runs, batsman: striker.player.name });
+      }
+
+      // Rotate strike on odd runs
+      if (runs % 2 !== 0) {
+        const temp = inn.currentStrikerIdx;
+        inn.currentStrikerIdx = inn.currentNonStrikerIdx;
+        inn.currentNonStrikerIdx = temp;
+      }
+    }
+
+    // Update strike rate & economy
+    striker.strikeRate = striker.balls > 0 ? ((striker.runs / striker.balls) * 100).toFixed(1) : "0.0";
+    const bowlerOvers = Math.floor(bowler.balls / 6) + (bowler.balls % 6) / 6;
+    bowler.economy = bowlerOvers > 0 ? (bowler.runs / bowlerOvers).toFixed(1) : "0.0";
+    bowler.overs = `${Math.floor(bowler.balls / 6)}.${bowler.balls % 6}`;
+
+    inn.currentOverBalls.push(ballSymbol);
+    inn.overRuns += runs;
+
+    this.addCommentary(desc, eventType);
+
+    // End of over check
+    if (ballsInOver === 0) {
+      this.manhattan[this.currentInnings - 1].push(inn.overRuns);
+      this.addCommentary(`📋 **End of Over ${completedOvers}**: ${inn.batTeam.name} are ${inn.totalRuns}/${inn.wickets} (${inn.overRuns} runs in the over).`);
+      inn.overRuns = 0;
+      inn.currentOverBalls = [];
+
+      // Rotate strike between overs
+      const temp = inn.currentStrikerIdx;
+      inn.currentStrikerIdx = inn.currentNonStrikerIdx;
+      inn.currentNonStrikerIdx = temp;
+
+      // Rotate bowler
+      inn.currentBowlerIdx = (inn.currentBowlerIdx + 1) % inn.bowlingCard.length;
+    }
+
+    // Check innings or match finish
+    if (this.currentInnings === 2) {
+      const target = this.innings[0].totalRuns + 1;
+      if (inn.totalRuns >= target) {
+        this.finishMatch();
+        return { event: "match_end", runs, isWicket, desc, symbol: ballSymbol };
+      }
+    }
+
+    if (inn.wickets >= 10 || inn.balls >= this.maxOvers * 6) {
+      if (this.currentInnings === 1) {
+        this.endInnings();
+        return { event: "innings_end", runs, isWicket, desc, symbol: ballSymbol };
+      } else {
+        this.finishMatch();
+        return { event: "match_end", runs, isWicket, desc, symbol: ballSymbol };
+      }
+    }
+
+    return { event: "ball", runs, isWicket, desc, symbol: ballSymbol };
+  }
+
+  endInnings() {
+    this.currentInnings = 2;
+    const firstInn = this.innings[0];
+    const target = firstInn.totalRuns + 1;
+    this.addCommentary(`🔔 **Innings Break**: ${firstInn.batTeam.name} scored **${firstInn.totalRuns}/${firstInn.wickets}** in ${firstInn.oversStr} overs.`);
+    this.addCommentary(`🎯 Target for ${this.innings[1].batTeam.name} is **${target} runs** from ${this.maxOvers} overs (Required Run Rate: ${(target / this.maxOvers).toFixed(1)}).`);
+  }
+
+  finishMatch() {
+    this.isFinished = true;
+    const inn1 = this.innings[0];
+    const inn2 = this.innings[1];
+
+    if (inn2.totalRuns > inn1.totalRuns) {
+      this.winner = inn2.batTeam;
+      const wicketsRemaining = 10 - inn2.wickets;
+      this.resultSummary = `${inn2.batTeam.name} won by ${wicketsRemaining} wicket${wicketsRemaining > 1 ? 's' : ''}!`;
+    } else if (inn1.totalRuns > inn2.totalRuns) {
+      this.winner = inn1.batTeam;
+      const runMargin = inn1.totalRuns - inn2.totalRuns;
+      this.resultSummary = `${inn1.batTeam.name} won by ${runMargin} run${runMargin > 1 ? 's' : ''}!`;
+    } else {
+      this.winner = "tie";
+      this.resultSummary = `Match TIED! What a sensational contest on the green!`;
+    }
+
+    // Award Player of the Match
+    this.awardPOTM();
+    this.addCommentary(`🏆 **Full Time**: ${this.resultSummary}`);
+  }
+
+  awardPOTM() {
+    let bestPlayer = null;
+    let highestImpact = -1;
+
+    [...this.innings[0].battingCard, ...this.innings[1].battingCard].forEach(b => {
+      const impact = b.runs * 1.5 + b.sixes * 4 + b.fours * 2;
+      if (impact > highestImpact) {
+        highestImpact = impact;
+        bestPlayer = { player: b.player, feat: `${b.runs} runs (${b.balls}b, ${b.fours}x4, ${b.sixes}x6)` };
+      }
+    });
+
+    [...this.innings[0].bowlingCard, ...this.innings[1].bowlingCard].forEach(b => {
+      const impact = b.wickets * 28 - b.runs * 0.5;
+      if (impact > highestImpact) {
+        highestImpact = impact;
+        bestPlayer = { player: b.player, feat: `${b.wickets}/${b.runs} (${b.overs} overs)` };
+      }
+    });
+
+    this.playerOfTheMatch = bestPlayer || { player: this.userSquad[0], feat: "Crucial captaincy knock" };
+  }
+}
+
+window.CricketMatchEngine = CricketMatchEngine;
+
+
+    // --- 4. Main Application Controller (app.js) ---
+// Willow & Leather: Cricket Club Manager
+// Main Application Controller & State Engine
+
+class CricketApp {
+  constructor() {
+    this.currentTab = "home";
+    this.saveKey = "willow_leather_save_v1";
+    this.state = this.loadState() || this.createInitialState();
+    
+    this.activeMatch = null;
+    this.matchInterval = null;
+    this.simSpeed = 1200; // ms per ball
+    this.isSimulating = false;
+    this.timingLoop = null;
+    this.timingPos = 0;
+    this.timingDirection = 1;
+    this.selectedShot = null;
+    this.selectedDelivery = null;
+    this.bowlingPitchZone = { x: 50, y: 70 };
+
+    this.initDOM();
+    this.bindEvents();
+    this.render();
+  }
+
+  createInitialState() {
+    const tier = 4; // Village Sunday League
+    const division = CRICKET_DATA.DIVISIONS.find(d => d.id === tier);
+    const squad = generateStarterSquad(tier);
+
+    // Initial League Table
+    const leagueTable = [
+      { id: "user", name: "Willowbrook CC", played: 0, won: 0, lost: 0, tied: 0, nrr: "+0.000", pts: 0, runsFor: 0, oversFor: 0, runsAgainst: 0, oversAgainst: 0 },
+      ...division.clubs.map(c => ({
+        id: c.id,
+        name: c.name,
+        color: c.color,
+        short: c.short,
+        played: 0, won: 0, lost: 0, tied: 0, nrr: "+0.000", pts: 0, runsFor: 0, oversFor: 0, runsAgainst: 0, oversAgainst: 0
+      }))
+    ];
+
+    return {
+      clubName: "Willowbrook CC",
+      groundName: "The Village Green",
+      groundLevel: 1,
+      divisionTier: tier,
+      coins: 1800,
+      season: 1,
+      week: 1,
+      maxWeeks: 10,
+      squad,
+      lineup: squad.slice(0, 11).map(p => p.id),
+      tactics: {
+        batting: "normal",
+        field: "balanced",
+        homePitch: "flat"
+      },
+      facilities: {
+        nets: 1,
+        physio: 1,
+        curator: 1,
+        academy: 1
+      },
+      leagueTable,
+      transferMarket: [
+        generatePlayer({ tier: 4 }),
+        generatePlayer({ tier: 4 }),
+        generatePlayer({ tier: 3 }),
+        generatePlayer({ tier: 4 })
+      ],
+      news: [
+        { text: "Welcome to Willowbrook CC! Take your club from the village green to Lord's!", icon: "🏏" },
+        { text: "Groundsman reports pitch rolled and ready for Sunday's opening clash.", icon: "🌱" }
+      ]
+    };
+  }
+
+  saveState() {
+    try {
+      localStorage.setItem(this.saveKey, JSON.stringify(this.state));
+    } catch (e) {
+      console.warn("Save state failed", e);
+    }
+  }
+
+  loadState() {
+    try {
+      const data = localStorage.getItem(this.saveKey);
+      if (data) return JSON.parse(data);
+    } catch (e) {
+      console.warn("Load state failed", e);
+    }
+    return null;
+  }
+
+  initDOM() {
+    // Check saved theme
+    if (localStorage.getItem("wl_theme") === "dark") {
+      document.documentElement.dataset.theme = "dark";
+      const icon = document.getElementById("themeIcon");
+      if (icon) icon.textContent = "☀️";
+    }
+  }
+
+  bindEvents() {
+    // Bottom Tab Clicks
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tab = btn.dataset.tab;
+        this.switchTab(tab);
+        window.cricketAudio.playClick();
+      });
+    });
+
+    // Theme Toggle
+    const themeBtn = document.getElementById("themeToggle");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", () => {
+        const isDark = document.documentElement.dataset.theme === "dark";
+        if (isDark) {
+          delete document.documentElement.dataset.theme;
+          localStorage.setItem("wl_theme", "light");
+          document.getElementById("themeIcon").textContent = "🌙";
+        } else {
+          document.documentElement.dataset.theme = "dark";
+          localStorage.setItem("wl_theme", "dark");
+          document.getElementById("themeIcon").textContent = "☀️";
+        }
+        window.cricketAudio.playClick();
+      });
+    }
+
+    // Audio Mute Toggle
+    const muteBtn = document.getElementById("muteToggle");
+    if (muteBtn) {
+      muteBtn.addEventListener("click", () => {
+        const muted = window.cricketAudio.toggleMute();
+        muteBtn.textContent = muted ? "🔇" : "🔊";
+      });
+      muteBtn.textContent = window.cricketAudio.muted ? "🔇" : "🔊";
+    }
+
+    // Modal background click closing
+    document.querySelectorAll(".modal-overlay").forEach(overlay => {
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+          overlay.style.display = "none";
+        }
+      });
+    });
+
+    // Keyboard Spacebar for Big Chance Hit
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        const hitBtn = document.getElementById("bigChanceActionBtn");
+        if (hitBtn && hitBtn.offsetParent !== null) {
+          e.preventDefault();
+          hitBtn.click();
+        }
+      }
+    });
+  }
+
+  switchTab(tabName) {
+    this.currentTab = tabName;
+    document.querySelectorAll(".tab-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.tab === tabName);
+    });
+
+    document.querySelectorAll(".screen-content").forEach(s => {
+      s.style.display = s.id === `tab-${tabName}` ? "flex" : "none";
+    });
+
+    this.render();
+  }
+
+  render() {
+    this.renderTopBar();
+    if (this.currentTab === "home") this.renderHome();
+    else if (this.currentTab === "squad") this.renderSquad();
+    else if (this.currentTab === "match") this.renderMatch();
+    else if (this.currentTab === "league") this.renderLeague();
+    else if (this.currentTab === "campus") this.renderCampus();
+  }
+
+  renderTopBar() {
+    const clubTitle = document.getElementById("topClubName");
+    const divPill = document.getElementById("topDivName");
+    const coinPill = document.getElementById("topCoins");
+
+    if (clubTitle) clubTitle.textContent = this.state.clubName;
+    if (divPill) {
+      const div = CRICKET_DATA.DIVISIONS.find(d => d.id === this.state.divisionTier);
+      divPill.textContent = `${div.short} • W${this.state.week}`;
+    }
+    if (coinPill) coinPill.textContent = `£${this.state.coins.toLocaleString()}`;
+  }
+
+  // ================= HOME / PAVILION SCREEN =================
+  renderHome() {
+    const groundTier = CRICKET_DATA.GROUND_LEVELS[this.state.groundLevel - 1];
+    const heroBanner = document.getElementById("groundHeroBanner");
+    const heroTitle = document.getElementById("groundHeroTitle");
+    const heroSubtitle = document.getElementById("groundHeroSub");
+
+    if (heroBanner) heroBanner.style.backgroundImage = `url('${groundTier.image}')`;
+    if (heroTitle) heroTitle.textContent = this.state.groundName;
+    if (heroSubtitle) heroSubtitle.textContent = `${groundTier.name} (Cap: ${groundTier.capacity.toLocaleString()}) • £${groundTier.ticketPrice}/ticket`;
+
+    // Next Opponent
+    const nextOpp = this.getNextOpponent();
+    const nextOppName = document.getElementById("nextOppName");
+    const nextOppCrest = document.getElementById("nextOppCrest");
+    const userCrest = document.getElementById("userCrest");
+    const nextMatchPitch = document.getElementById("nextMatchPitch");
+
+    if (nextOppName) nextOppName.textContent = nextOpp.name;
+    if (nextOppCrest) {
+      nextOppCrest.textContent = nextOpp.short || "OPP";
+      nextOppCrest.style.backgroundColor = nextOpp.color || "#333";
+      nextOppCrest.style.color = nextOpp.accent || "#fff";
+    }
+    if (userCrest) {
+      userCrest.textContent = this.state.clubName.substring(0, 3).toUpperCase();
+      userCrest.style.backgroundColor = "var(--go)";
+      userCrest.style.color = "#fff";
+    }
+
+    const pitchType = CRICKET_DATA.PITCH_TYPES[this.state.tactics.homePitch] || CRICKET_DATA.PITCH_TYPES.flat;
+    if (nextMatchPitch) nextMatchPitch.textContent = `${pitchType.icon} ${pitchType.name}`;
+
+    // Play Match Button
+    const playBtn = document.getElementById("btnPlayFixture");
+    if (playBtn) {
+      playBtn.onclick = () => {
+        this.startMatchdayFlow();
+      };
+    }
+
+    // Tiles Stats
+    const userStanding = this.state.leagueTable.find(t => t.id === "user") || { pts: 0 };
+    const userRank = this.state.leagueTable.slice().sort((a,b) => b.pts - a.pts).findIndex(t => t.id === "user") + 1;
+    
+    const tilePos = document.getElementById("tileLeaguePos");
+    const tilePts = document.getElementById("tileLeaguePts");
+    const tileSquad = document.getElementById("tileSquadSize");
+
+    if (tilePos) tilePos.textContent = `${userRank || 1}th`;
+    if (tilePts) tilePts.textContent = `${userStanding.pts} pts`;
+    if (tileSquad) tileSquad.textContent = `${this.state.squad.length} men`;
+
+    // News Items
+    const newsList = document.getElementById("homeNewsList");
+    if (newsList) {
+      newsList.innerHTML = this.state.news.slice(0, 3).map(n => `
+        <div class="news-item">
+          <span>${n.icon}</span>
+          <p>${n.text}</p>
+        </div>
+      `).join("");
+    }
+  }
+
+  getNextOpponent() {
+    const div = CRICKET_DATA.DIVISIONS.find(d => d.id === this.state.divisionTier);
+    const oppIdx = (this.state.week - 1) % div.clubs.length;
+    return div.clubs[oppIdx];
+  }
+
+  // ================= SQUAD & LINEUP SCREEN =================
+  renderSquad() {
+    const listEl = document.getElementById("squadPlayerList");
+    if (!listEl) return;
+
+    listEl.innerHTML = "";
+    
+    // Sort squad: starting XI first, then bench
+    const startingXI = this.state.squad.filter(p => this.state.lineup.includes(p.id));
+    const bench = this.state.squad.filter(p => !this.state.lineup.includes(p.id));
+
+    // Ordered according to lineup array
+    const orderedXI = this.state.lineup.map(id => startingXI.find(p => p.id === id)).filter(Boolean);
+
+    // Render Starting XI
+    const xiHeader = document.createElement("h3");
+    xiHeader.textContent = `Starting XI (Matchday Lineup)`;
+    xiHeader.style.margin = "8px 0 4px";
+    listEl.appendChild(xiHeader);
+
+    orderedXI.forEach((p, idx) => {
+      listEl.appendChild(this.createPlayerRow(p, idx + 1, true));
+    });
+
+    // Render Bench
+    if (bench.length > 0) {
+      const benchHeader = document.createElement("h3");
+      benchHeader.textContent = `Reserves & Bench (${bench.length})`;
+      benchHeader.style.margin = "16px 0 4px";
+      listEl.appendChild(benchHeader);
+
+      bench.forEach(p => {
+        listEl.appendChild(this.createPlayerRow(p, "-", false));
+      });
+    }
+
+    // Tactics selectors
+    const batTac = document.getElementById("tacticBatting");
+    const fieldTac = document.getElementById("tacticField");
+    if (batTac) {
+      batTac.value = this.state.tactics.batting;
+      batTac.onchange = () => {
+        this.state.tactics.batting = batTac.value;
+        this.saveState();
+      };
+    }
+    if (fieldTac) {
+      fieldTac.value = this.state.tactics.field;
+      fieldTac.onchange = () => {
+        this.state.tactics.field = fieldTac.value;
+        this.saveState();
+      };
+    }
+  }
+
+  createPlayerRow(player, orderNum, isStarting) {
+    const row = document.createElement("div");
+    row.className = "player-row";
+
+    let badgeClass = "badge-bat";
+    if (player.role.type === "BOWL") badgeClass = "badge-bowl";
+    if (player.role.type === "ALL") badgeClass = "badge-all";
+    if (player.role.type === "WK") badgeClass = "badge-wk";
+
+    row.innerHTML = `
+      <div class="player-order">${orderNum}</div>
+      <div class="player-avatar" style="background-color: ${player.avatarColor};">${player.initials}</div>
+      <div class="player-info">
+        <div class="player-info-name">
+          ${player.name}
+          <span class="badge-tag ${badgeClass}">${player.role.type}</span>
+          ${orderNum === 1 ? '⭐' : ''}
+        </div>
+        <div class="player-info-sub">
+          <span>${player.role.label}</span>
+          <span>•</span>
+          <span>⚡ ${player.stamina}%</span>
+          <span>•</span>
+          <span>£${player.wage}/wk</span>
+        </div>
+      </div>
+      <div class="player-rating">${player.overall}</div>
+    `;
+
+    row.onclick = () => {
+      this.showPlayerCardModal(player);
+    };
+
+    return row;
+  }
+
+  showPlayerCardModal(player) {
+    const modal = document.getElementById("playerModal");
+    const content = document.getElementById("playerModalBody");
+    if (!modal || !content) return;
+
+    content.innerHTML = `
+      <div style="display: flex; gap: 14px; align-items: center;">
+        <div class="player-avatar" style="background-color: ${player.avatarColor}; width: 64px; height: 64px; font-size: 24px;">
+          ${player.initials}
+        </div>
+        <div>
+          <h2>${player.name}</h2>
+          <p style="color: var(--soft);">${player.role.label} • Age ${player.age}</p>
+          <div style="display: flex; gap: 6px; margin-top: 4px;">
+            <span class="badge-tag badge-bat">OVR ${player.overall}</span>
+            <span class="badge-tag badge-all">${player.trait}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tiles-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 12px;">
+        <div class="tile">
+          <span>Batting</span>
+          <b>${player.bat}</b>
+          <small>Timing: ${player.timing}</small>
+        </div>
+        <div class="tile">
+          <span>Bowling</span>
+          <b>${player.bowl}</b>
+          <small>Acc: ${player.accuracy}</small>
+        </div>
+        <div class="tile">
+          <span>Power</span>
+          <b>${player.power}</b>
+          <small>Speed: ${player.speed}</small>
+        </div>
+      </div>
+
+      <div class="card flat" style="margin-top: 10px;">
+        <h4 style="margin-bottom: 6px;">Season Career Numbers</h4>
+        <p style="font-size: 13px; color: var(--soft);">
+          Runs: <b>${player.stats.runs}</b> | High Score: <b>${player.stats.highScore}</b> | 50s: <b>${player.stats.fifties}</b><br>
+          Wickets: <b>${player.stats.wickets}</b> | Best Bowl: <b>${player.stats.bestBowling}</b> | Catches: <b>${player.stats.catches}</b>
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 10px;">
+        <button class="btn-go" id="btnSetAsCaptain" style="font-size: 15px; min-height: 44px;">
+          ⭐ Make Captain
+        </button>
+        <button class="btn-secondary" id="btnReleasePlayer" style="color: var(--down);">
+          Release
+        </button>
+      </div>
+    `;
+
+    document.getElementById("btnSetAsCaptain").onclick = () => {
+      // Move player to top of lineup
+      const filtered = this.state.lineup.filter(id => id !== player.id);
+      this.state.lineup = [player.id, ...filtered];
+      this.saveState();
+      modal.style.display = "none";
+      this.renderSquad();
+      window.cricketAudio.playClick();
+    };
+
+    modal.style.display = "flex";
+  }
+
+  // ================= MATCHDAY ENGINE & FLOW =================
+  startMatchdayFlow() {
+    this.switchTab("match");
+    const opp = this.getNextOpponent();
+    const oppSquad = Array.from({ length: 11 }, () => generatePlayer({ tier: this.state.divisionTier }));
+    const homePitch = CRICKET_DATA.PITCH_TYPES[this.state.tactics.homePitch] || CRICKET_DATA.PITCH_TYPES.flat;
+
+    const userStartingSquad = this.state.lineup.map(id => this.state.squad.find(p => p.id === id)).filter(Boolean);
+
+    this.activeMatch = new CricketMatchEngine({
+      userClub: { name: this.state.clubName, color: "var(--go)" },
+      oppClub: opp,
+      pitch: homePitch,
+      maxOvers: 5,
+      isHome: true,
+      userSquad: userStartingSquad,
+      oppSquad: oppSquad,
+      userTactics: this.state.tactics
+    });
+
+    // Show Toss Modal
+    this.showTossModal();
+  }
+
+  showTossModal() {
+    const modal = document.getElementById("tossModal");
+    if (!modal) {
+      this.activeMatch.setupMatch(true);
+      this.startLiveSimulation();
+      return;
+    }
+
+    modal.style.display = "flex";
+    document.getElementById("btnTossBat").onclick = () => {
+      modal.style.display = "none";
+      this.activeMatch.setupMatch(true);
+      window.cricketAudio.playClick();
+      this.startLiveSimulation();
+    };
+    document.getElementById("btnTossBowl").onclick = () => {
+      modal.style.display = "none";
+      this.activeMatch.setupMatch(false);
+      window.cricketAudio.playClick();
+      this.startLiveSimulation();
+    };
+  }
+
+  startLiveSimulation() {
+    this.isSimulating = true;
+    this.renderMatchBoard();
+    this.clearCommentaryDOM();
+
+    // Hook commentary to audio and ticker
+    this.activeMatch.callbacks.onCommentary = (entry) => {
+      this.appendCommentaryDOM(entry);
+    };
+
+    this.scheduleNextBall();
+  }
+
+  scheduleNextBall() {
+    if (!this.isSimulating || !this.activeMatch || this.activeMatch.isFinished) return;
+
+    this.matchInterval = setTimeout(() => {
+      const result = this.activeMatch.simulateBall();
+      
+      if (!result) return;
+
+      if (result.event === "big_chance") {
+        // Pause simulation for interactive Big Chance
+        this.openBigChanceArena(result.payload);
+        return;
+      }
+
+      this.handleBallAudio(result);
+      this.renderMatchBoard();
+
+      if (result.event === "match_end") {
+        this.isSimulating = false;
+        this.onMatchComplete();
+      } else {
+        this.scheduleNextBall();
+      }
+    }, this.simSpeed);
+  }
+
+  handleBallAudio(result) {
+    if (!result) return;
+    if (result.isWicket) {
+      window.cricketAudio.playStumpsClatter();
+    } else if (result.runs === 6) {
+      window.cricketAudio.playBatCrack(true);
+      window.cricketAudio.playBoundary();
+    } else if (result.runs === 4) {
+      window.cricketAudio.playBatCrack(false);
+      window.cricketAudio.playBoundary();
+    } else if (result.runs > 0) {
+      window.cricketAudio.playBatCrack(false);
+    }
+  }
+
+  renderMatch() {
+    if (!this.activeMatch) {
+      const board = document.getElementById("matchdayBoard");
+      if (board) {
+        board.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px;">
+            <p style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">No Match In Progress</p>
+            <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 20px;">Head over to the Pavilion to play your next league fixture!</p>
+            <button class="btn-go" onclick="window.cricketApp.switchTab('home')" style="max-width: 200px; margin: 0 auto;">To Pavilion</button>
+          </div>
+        `;
+      }
+      return;
+    }
+    this.renderMatchBoard();
+    this.drawWagonWheel();
+  }
+
+  renderMatchBoard() {
+    const inn = this.activeMatch.getCurrentInnings();
+    if (!inn) return;
+
+    // Team and scoreline
+    const scoreRuns = document.getElementById("liveRunsWickets");
+    const scoreOvers = document.getElementById("liveOvers");
+    const batTeamName = document.getElementById("liveBatTeam");
+    const targetLabel = document.getElementById("liveTargetLabel");
+
+    if (scoreRuns) scoreRuns.textContent = `${inn.totalRuns}/${inn.wickets}`;
+    if (scoreOvers) scoreOvers.textContent = `(${inn.oversStr}/${this.activeMatch.maxOvers} ov)`;
+    if (batTeamName) batTeamName.textContent = inn.batTeam.name;
+
+    if (targetLabel) {
+      if (this.activeMatch.currentInnings === 2) {
+        const target = this.activeMatch.innings[0].totalRuns + 1;
+        const needed = target - inn.totalRuns;
+        const ballsLeft = (this.activeMatch.maxOvers * 6) - inn.balls;
+        targetLabel.textContent = needed <= 0 ? "Target Reached!" : `Need ${needed} from ${ballsLeft}b`;
+      } else {
+        const runRate = inn.balls > 0 ? ((inn.totalRuns / inn.balls) * 6).toFixed(1) : "0.0";
+        targetLabel.textContent = `Current RR: ${runRate}`;
+      }
+    }
+
+    // Active Batters
+    const striker = inn.battingCard[inn.currentStrikerIdx];
+    const nonStriker = inn.battingCard[inn.currentNonStrikerIdx];
+    const bowler = inn.bowlingCard[inn.currentBowlerIdx];
+
+    const strikerEl = document.getElementById("liveStriker");
+    const nonStrikerEl = document.getElementById("liveNonStriker");
+    const bowlerEl = document.getElementById("liveBowler");
+
+    if (strikerEl && striker) {
+      strikerEl.innerHTML = `<b>${striker.player.name} *</b><span>${striker.runs} (${striker.balls}b, ${striker.fours}x4, ${striker.sixes}x6)</span>`;
+    }
+    if (nonStrikerEl && nonStriker) {
+      nonStrikerEl.innerHTML = `<b>${nonStriker.player.name}</b><span>${nonStriker.runs} (${nonStriker.balls}b)</span>`;
+    }
+    if (bowlerEl && bowler) {
+      bowlerEl.innerHTML = `<b>${bowler.player.name}</b><span>${bowler.wickets}/${bowler.runs} (${bowler.overs} ov)</span>`;
+    }
+
+    // Over Balls bubbles
+    const track = document.getElementById("overBallsTrack");
+    if (track) {
+      track.innerHTML = inn.currentOverBalls.map(sym => {
+        let cls = "";
+        if (sym === "4") cls = "four";
+        if (sym === "6") cls = "six";
+        if (sym === "W") cls = "wicket";
+        return `<div class="ball-bubble ${cls} pop">${sym}</div>`;
+      }).join("");
+    }
+
+    this.drawWagonWheel();
+  }
+
+  drawWagonWheel() {
+    const canvas = document.getElementById("wagonCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Oval boundary lines
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, cx - 10, cy - 10, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Inner 30-yard circle
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, (cx - 10) * 0.55, (cy - 10) * 0.55, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Pitch crease in center
+    ctx.fillStyle = "#e3d8c3";
+    ctx.fillRect(cx - 4, cy - 12, 8, 24);
+
+    // Radiating shot lines
+    this.activeMatch.wagonWheel.forEach(shot => {
+      const maxR = (cx - 10) * (shot.distance / 100);
+      const ex = cx + Math.cos(shot.angle) * maxR;
+      const ey = cy + Math.sin(shot.angle) * maxR;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(ex, ey);
+
+      if (shot.runs === 6) ctx.strokeStyle = "#ffc93c";
+      else if (shot.runs === 4) ctx.strokeStyle = "#5fc26c";
+      else ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+
+      ctx.lineWidth = shot.runs >= 4 ? 2.5 : 1.2;
+      ctx.stroke();
+
+      // Dot at landing spot
+      ctx.beginPath();
+      ctx.arc(ex, ey, shot.runs === 6 ? 4 : (shot.runs === 4 ? 3 : 2), 0, Math.PI * 2);
+      ctx.fillStyle = shot.runs >= 4 ? "#fff" : "rgba(255, 255, 255, 0.7)";
+      ctx.fill();
+    });
+  }
+
+  clearCommentaryDOM() {
+    const list = document.getElementById("commList");
+    if (list) list.innerHTML = "";
+  }
+
+  appendCommentaryDOM(entry) {
+    const list = document.getElementById("commList");
+    if (!list) return;
+
+    const div = document.createElement("div");
+    div.className = `comm-entry ${entry.type}`;
+    div.innerHTML = `
+      <div class="comm-ball">${entry.ball}</div>
+      <div>${entry.text}</div>
+    `;
+
+    list.insertBefore(div, list.firstChild);
+  }
+
+  // ================= BIG CHANCE INTERACTIVE MINI-GAME =================
+  openBigChanceArena(payload) {
+    const modal = document.getElementById("bigChanceModal");
+    const arenaBody = document.getElementById("bigChanceBody");
+    if (!modal || !arenaBody) return;
+
+    window.cricketAudio.playHowzat();
+
+    if (payload.type === "batting") {
+      this.selectedShot = payload.shots[0].id;
+      arenaBody.innerHTML = `
+        <div class="big-chance-arena">
+          <div class="chance-title-bar">
+            <span class="chance-badge">🚨 BIG CHANCE • BATTING</span>
+            <span style="font-size: 13px; font-weight: 700;">${payload.striker.name} to strike</span>
+          </div>
+          <p style="font-size: 14px;">
+            <b>${payload.bowler.name}</b> runs up with a dangerous <b>${payload.delivery.name}</b> (${payload.delivery.speed})!
+          </p>
+
+          <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--sun);">
+            1. Select Your Shot
+          </div>
+          <div class="choices-grid" id="shotChoices">
+            ${payload.shots.map((s, idx) => `
+              <div class="choice-card ${idx === 0 ? 'selected' : ''}" data-id="${s.id}">
+                <b>${s.name}</b>
+                <small>${s.desc}</small>
+              </div>
+            `).join("")}
+          </div>
+
+          <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--sun); margin-top: 4px;">
+            2. Time The Sweet Spot & Hit!
+          </div>
+          <div class="timing-meter-wrap">
+            <div class="timing-track" id="timingTrack">
+              <div class="timing-zone red"></div>
+              <div class="timing-zone yellow"></div>
+              <div class="timing-zone green"></div>
+              <div class="timing-zone yellow"></div>
+              <div class="timing-zone red"></div>
+              <div class="timing-indicator" id="timingIndicator"></div>
+            </div>
+          </div>
+
+          <button class="btn-go" id="bigChanceActionBtn" style="margin-top: 4px;">
+            🏏 HIT SHOT! (or Press Space)
+          </button>
+        </div>
+      `;
+
+      // Shot select click
+      arenaBody.querySelectorAll(".choice-card").forEach(card => {
+        card.onclick = () => {
+          arenaBody.querySelectorAll(".choice-card").forEach(c => c.classList.remove("selected"));
+          card.classList.add("selected");
+          this.selectedShot = card.dataset.id;
+          window.cricketAudio.playClick();
+        };
+      });
+
+      this.startTimingBarOscillation();
+
+      document.getElementById("bigChanceActionBtn").onclick = () => {
+        this.executeBattingBigChance();
+      };
+
+    } else {
+      // Bowling Big Chance
+      this.selectedDelivery = payload.deliveries[0].id;
+      arenaBody.innerHTML = `
+        <div class="big-chance-arena">
+          <div class="chance-title-bar">
+            <span class="chance-badge">🚨 BIG CHANCE • BOWLING</span>
+            <span style="font-size: 13px; font-weight: 700;">${payload.bowler.name} bowling</span>
+          </div>
+          <p style="font-size: 14px;">
+            ${payload.striker.name} is looking dangerous at the crease! Need an unplayable delivery for the breakthrough!
+          </p>
+
+          <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--sun);">
+            1. Select Delivery Weapon
+          </div>
+          <div class="choices-grid" id="deliveryChoices">
+            ${payload.deliveries.map((d, idx) => `
+              <div class="choice-card ${idx === 0 ? 'selected' : ''}" data-id="${d.id}">
+                <b>${d.name}</b>
+                <small>${d.speed} • ${d.desc}</small>
+              </div>
+            `).join("")}
+          </div>
+
+          <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--sun); margin-top: 4px;">
+            2. Perfect The Release Accuracy!
+          </div>
+          <div class="timing-meter-wrap">
+            <div class="timing-track" id="timingTrack">
+              <div class="timing-zone red"></div>
+              <div class="timing-zone yellow"></div>
+              <div class="timing-zone green"></div>
+              <div class="timing-zone yellow"></div>
+              <div class="timing-zone red"></div>
+              <div class="timing-indicator" id="timingIndicator"></div>
+            </div>
+          </div>
+
+          <button class="btn-go" id="bigChanceActionBtn" style="margin-top: 4px;">
+            🎯 UNLEASH BALL!
+          </button>
+        </div>
+      `;
+
+      arenaBody.querySelectorAll(".choice-card").forEach(card => {
+        card.onclick = () => {
+          arenaBody.querySelectorAll(".choice-card").forEach(c => c.classList.remove("selected"));
+          card.classList.add("selected");
+          this.selectedDelivery = card.dataset.id;
+          window.cricketAudio.playClick();
+        };
+      });
+
+      this.startTimingBarOscillation();
+
+      document.getElementById("bigChanceActionBtn").onclick = () => {
+        this.executeBowlingBigChance();
+      };
+    }
+
+    modal.style.display = "flex";
+  }
+
+  startTimingBarOscillation() {
+    if (this.timingLoop) clearInterval(this.timingLoop);
+    this.timingPos = 0;
+    this.timingDirection = 1;
+    const speed = 2.4; // sweep speed
+
+    this.timingLoop = setInterval(() => {
+      this.timingPos += speed * this.timingDirection;
+      if (this.timingPos >= 100) {
+        this.timingPos = 100;
+        this.timingDirection = -1;
+      } else if (this.timingPos <= 0) {
+        this.timingPos = 0;
+        this.timingDirection = 1;
+      }
+      const indicator = document.getElementById("timingIndicator");
+      if (indicator) indicator.style.left = `${this.timingPos}%`;
+    }, 16);
+  }
+
+  stopTimingBar() {
+    if (this.timingLoop) {
+      clearInterval(this.timingLoop);
+      this.timingLoop = null;
+    }
+    // Calculate distance from center sweet spot (center is 50%)
+    const distFromSweetSpot = Math.abs(50 - this.timingPos);
+    // 0 = sweet spot, 50 = maximum miss
+    const accuracy = Math.max(0, 1 - (distFromSweetSpot / 50));
+    return accuracy;
+  }
+
+  executeBattingBigChance() {
+    const accuracy = this.stopTimingBar();
+    const result = this.activeMatch.resolveBattingBigChance(this.selectedShot, accuracy);
+
+    this.handleBallAudio(result);
+    this.closeBigChanceModal();
+  }
+
+  executeBowlingBigChance() {
+    const accuracy = this.stopTimingBar();
+    const result = this.activeMatch.resolveBowlingBigChance(this.selectedDelivery, accuracy, this.bowlingPitchZone);
+
+    this.handleBallAudio(result);
+    this.closeBigChanceModal();
+  }
+
+  closeBigChanceModal() {
+    const modal = document.getElementById("bigChanceModal");
+    if (modal) modal.style.display = "none";
+
+    this.renderMatchBoard();
+
+    if (this.activeMatch.isFinished) {
+      this.isSimulating = false;
+      this.onMatchComplete();
+    } else {
+      this.scheduleNextBall();
+    }
+  }
+
+  // ================= POST-MATCH CELEBRATION & LEDGER =================
+  onMatchComplete() {
+    const groundTier = CRICKET_DATA.GROUND_LEVELS[this.state.groundLevel - 1];
+    const ticketRevenue = Math.round(groundTier.capacity * groundTier.ticketPrice * 0.85);
+    const winBonus = this.activeMatch.winner === this.activeMatch.userClub ? 450 : 150;
+    const totalEarnings = ticketRevenue + winBonus;
+
+    this.state.coins += totalEarnings;
+    window.cricketAudio.playCrowdCheer(true);
+    window.cricketAudio.playCoin();
+
+    // Update League Points
+    const userRow = this.state.leagueTable.find(t => t.id === "user");
+    const oppRow = this.state.leagueTable.find(t => t.id === this.activeMatch.oppClub.id);
+
+    userRow.played++;
+    if (oppRow) oppRow.played++;
+
+    const isUserWin = this.activeMatch.winner === this.activeMatch.userClub;
+    if (isUserWin) {
+      userRow.won++;
+      userRow.pts += 2;
+      if (oppRow) oppRow.lost++;
+    } else if (this.activeMatch.winner === "tie") {
+      userRow.tied++;
+      userRow.pts += 1;
+      if (oppRow) { oppRow.tied++; oppRow.pts += 1; }
+    } else {
+      userRow.lost++;
+      if (oppRow) { oppRow.won++; oppRow.pts += 2; }
+    }
+
+    // Simulate other clubs in league for this week
+    this.simulateOtherLeagueMatches();
+
+    this.state.news.unshift({
+      text: `${this.activeMatch.resultSummary} Gate receipts collected £${ticketRevenue.toLocaleString()}.`,
+      icon: isUserWin ? "🏆" : "🏏"
+    });
+
+    this.state.week++;
+    this.saveState();
+
+    // Show Celebration Modal
+    this.showCelebrationModal(totalEarnings, isUserWin);
+  }
+
+  simulateOtherLeagueMatches() {
+    const clubs = this.state.leagueTable.filter(c => c.id !== "user" && c.id !== this.activeMatch.oppClub.id);
+    for (let i = 0; i < clubs.length; i += 2) {
+      if (i + 1 < clubs.length) {
+        const c1 = clubs[i];
+        const c2 = clubs[i+1];
+        c1.played++;
+        c2.played++;
+        if (Math.random() < 0.5) {
+          c1.won++;
+          c1.pts += 2;
+          c2.lost++;
+        } else {
+          c2.won++;
+          c2.pts += 2;
+          c1.lost++;
+        }
+      }
+    }
+  }
+
+  showCelebrationModal(earnings, isUserWin) {
+    const modal = document.getElementById("celebrationModal");
+    const body = document.getElementById("celebrationBody");
+    if (!modal || !body) return;
+
+    body.innerHTML = `
+      <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+        <span style="font-size: 52px;">${isUserWin ? '🏆' : '🏏'}</span>
+        <h2>${isUserWin ? 'Sensational Victory!' : 'Hard Fought Match'}</h2>
+        <p style="color: var(--soft); font-size: 16px;">${this.activeMatch.resultSummary}</p>
+        
+        <div class="card flat" style="width: 100%; margin-top: 8px; text-align: left;">
+          <h4 style="margin-bottom: 6px;">Player of the Match</h4>
+          <p style="font-size: 15px; font-weight: 800; color: var(--pitch);">⭐ ${this.activeMatch.playerOfTheMatch.player.name}</p>
+          <small style="color: var(--soft);">${this.activeMatch.playerOfTheMatch.feat}</small>
+        </div>
+
+        <div class="card flat" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 14px; font-weight: 700;">Match Revenue Earned</span>
+          <span class="pill-coin">+£${earnings.toLocaleString()} <span class="coin-icon"></span></span>
+        </div>
+
+        <button class="btn-go" style="width: 100%; margin-top: 8px;" id="btnCloseCelebration">
+          Continue to Pavilion
+        </button>
+      </div>
+    `;
+
+    document.getElementById("btnCloseCelebration").onclick = () => {
+      modal.style.display = "none";
+      this.switchTab("home");
+    };
+
+    modal.style.display = "flex";
+  }
+
+  // ================= LEAGUE TABLE SCREEN =================
+  renderLeague() {
+    const wrap = document.getElementById("leagueTableContent");
+    if (!wrap) return;
+
+    // Sort by points descending
+    const sorted = this.state.leagueTable.slice().sort((a, b) => b.pts - a.pts);
+
+    wrap.innerHTML = `
+      <div class="league-table-wrap">
+        <table class="league-tbl">
+          <thead>
+            <tr>
+              <th style="text-align: center; width: 32px;">Pos</th>
+              <th>Club</th>
+              <th>P</th>
+              <th>W</th>
+              <th>L</th>
+              <th>Pts</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${sorted.map((team, idx) => {
+              const isUser = team.id === "user";
+              return `
+                <tr class="${isUser ? 'user-row' : ''}">
+                  <td style="text-align: center; font-weight: 800;">${idx + 1}</td>
+                  <td class="club-name">${team.name} ${isUser ? '⭐' : ''}</td>
+                  <td>${team.played}</td>
+                  <td>${team.won}</td>
+                  <td>${team.lost}</td>
+                  <td class="pts">${team.pts}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tiles-grid" style="grid-template-columns: 1fr 1fr; margin-top: 14px;">
+        <div class="tile">
+          <span>Leading Run Scorer 🧢</span>
+          <b>${this.state.squad[0].name}</b>
+          <small>${this.state.squad[0].stats.runs} Runs (SR 142.5)</small>
+        </div>
+        <div class="tile">
+          <span>Leading Wicket Taker 🟣</span>
+          <b>${this.state.squad[7].name}</b>
+          <small>${this.state.squad[7].stats.wickets} Wickets (Econ 6.2)</small>
+        </div>
+      </div>
+    `;
+  }
+
+  // ================= CAMPUS & FACILITIES SCREEN =================
+  renderCampus() {
+    const groundTier = CRICKET_DATA.GROUND_LEVELS[this.state.groundLevel - 1];
+    const nextGroundTier = CRICKET_DATA.GROUND_LEVELS[this.state.groundLevel] || null;
+
+    const groundCard = document.getElementById("campusGroundCard");
+    if (groundCard) {
+      groundCard.innerHTML = `
+        <div style="display: flex; gap: 14px; align-items: center;">
+          <img src="${groundTier.image}" style="width: 80px; height: 80px; border-radius: 14px; object-fit: cover;">
+          <div style="flex: 1;">
+            <h3>${groundTier.name} (Level ${this.state.groundLevel})</h3>
+            <p style="font-size: 13px; color: var(--soft);">${groundTier.perk}</p>
+            <p style="font-size: 13px; font-weight: 700; margin-top: 2px;">Capacity: ${groundTier.capacity.toLocaleString()} spectators</p>
+          </div>
+        </div>
+        ${nextGroundTier ? `
+          <button class="btn-go" id="btnUpgradeGround" style="margin-top: 10px; font-size: 15px; min-height: 44px;">
+            Upgrade to ${nextGroundTier.name} (£${nextGroundTier.upgradeCost.toLocaleString()})
+          </button>
+        ` : `<div class="badge-tag badge-bowl" style="margin-top: 8px; text-align: center;">Maximum Stadium Reached!</div>`}
+      `;
+
+      if (nextGroundTier) {
+        document.getElementById("btnUpgradeGround").onclick = () => {
+          if (this.state.coins >= nextGroundTier.upgradeCost) {
+            this.state.coins -= nextGroundTier.upgradeCost;
+            this.state.groundLevel++;
+            this.state.groundName = nextGroundTier.name;
+            window.cricketAudio.playCoin();
+            this.saveState();
+            this.render();
+          } else {
+            alert("Insufficient club treasury balance!");
+          }
+        };
+      }
+    }
+
+    // Facility Upgrades
+    const facWrap = document.getElementById("facilitiesList");
+    if (facWrap) {
+      facWrap.innerHTML = CRICKET_DATA.FACILITIES.map(fac => {
+        const curLvl = this.state.facilities[fac.id] || 1;
+        const cost = fac.baseCost * curLvl;
+        return `
+          <div class="facility-card">
+            <div class="facility-icon">🏛️</div>
+            <div class="facility-details">
+              <h4>${fac.name} (Lvl ${curLvl}/${fac.maxLevel})</h4>
+              <p>${fac.perk}</p>
+            </div>
+            ${curLvl < fac.maxLevel ? `
+              <button class="btn-secondary" onclick="window.cricketApp.upgradeFacility('${fac.id}', ${cost})">
+                +1 (£${cost})
+              </button>
+            ` : `<span class="badge-tag badge-bowl">MAX</span>`}
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Transfer Market
+    const marketWrap = document.getElementById("transferMarketList");
+    if (marketWrap) {
+      marketWrap.innerHTML = this.state.transferMarket.map((p, idx) => `
+        <div class="market-row">
+          <div class="player-avatar" style="background-color: ${p.avatarColor};">${p.initials}</div>
+          <div class="player-info">
+            <div class="player-info-name">${p.name} <span class="badge-tag badge-bat">${p.role.type}</span></div>
+            <div class="player-info-sub">OVR ${p.overall} • Age ${p.age} • ${p.trait}</div>
+          </div>
+          <div style="font-family: var(--num); font-size: 16px; font-weight: 800;">£${p.value}</div>
+          <button class="btn-go" onclick="window.cricketApp.signPlayer(${idx})" style="min-height: 36px; padding: 0 12px; font-size: 13px;">
+            Sign
+          </button>
+        </div>
+      `).join("");
+    }
+  }
+
+  upgradeFacility(facId, cost) {
+    if (this.state.coins >= cost) {
+      this.state.coins -= cost;
+      this.state.facilities[facId] = (this.state.facilities[facId] || 1) + 1;
+      window.cricketAudio.playCoin();
+      this.saveState();
+      this.render();
+    } else {
+      alert("Insufficient club treasury balance!");
+    }
+  }
+
+  signPlayer(index) {
+    const player = this.state.transferMarket[index];
+    if (!player) return;
+
+    if (this.state.coins >= player.value) {
+      this.state.coins -= player.value;
+      this.state.squad.push(player);
+      this.state.transferMarket.splice(index, 1);
+      // Generate new candidate
+      this.state.transferMarket.push(generatePlayer({ tier: this.state.divisionTier }));
+      window.cricketAudio.playCoin();
+      this.saveState();
+      this.render();
+      alert(`Signed ${player.name} to Willowbrook CC!`);
+    } else {
+      alert("Insufficient club treasury balance to sign player!");
+    }
+  }
+}
+
+// Global Startup
+window.addEventListener("DOMContentLoaded", () => {
+  window.cricketApp = new CricketApp();
+});
+
+  </script>
+</body>
+</html>
